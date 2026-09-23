@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Raw palette */
+  --gofun: #FCFBF6;
+  --nibi: #3B393C;
+  --akane: #951F1F;
+  --nezumi: #8C8279;
+
+  /* Semantic tokens — light mode */
+  --background: var(--gofun);
+  --foreground: var(--nibi);
+
+  --secondary: var(--nibi);
+  --secondary-foreground: var(--gofun);
+
+  --muted-foreground: var(--nezumi);
+
+  --accent: var(--akane);
+  --accent-foreground: var(--gofun);
+}
+
+.dark {
+  --background: var(--nibi);
+  --foreground: var(--gofun);
+
+  --secondary: var(--gofun);
+  --secondary-foreground: var(--nibi);
+
+  --muted-foreground: var(--nezumi);
+
+  --accent: var(--akane);
+  --accent-foreground: var(--gofun);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-sora), var(--font-mplus1), sans-serif;
+  --font-body: var(--font-source-serif), var(--font-noto-serif-jp), serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+.padding-x {
+  padding-inline: clamp(1rem, -2.875rem + 12.917vw, 8.75rem) !important;
+}
+
+.padding-y {
+  padding-block: clamp(1.5rem, -0.625rem + 7.083vw, 5.75rem) !important;
+}
