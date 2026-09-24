@@ -1,26 +1,17 @@
 import type { Route } from "./+types/home";
-import { graphql } from "~/gql";
-import { strapi } from "~/lib/strapi.server";
 import { getLocale } from "~/lib/i18n";
-
-const StageQuery = graphql(`
-  query Stage($stageNumber: Int!, $locale: I18NLocaleCode) {
-    stages(filters: { stageNumber: { eq: $stageNumber } }, locale: $locale) {
-      documentId
-      title
-      slug
-      stageNumber
-    }
-  }
-`);
+import { getPage } from "~/data/pages.server";
+import { Sections } from "~/components/sections/Sections";
+import { getStages } from "~/data/stages.server";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
-  const { stages } = await strapi.request(StageQuery, {
-    stageNumber: 1,
-    locale,
-  });
-  return { stage: stages[0] ?? null, locale };
+  const[page, latestStages] = await Promise.all([
+    getPage("home", locale),
+    getStages(locale, 3),
+  ]);
+  if (!page) throw new Response("Not Found", { status: 404 });
+  return {page, latestStages, locale};
 }
 
 export function meta({}: Route.MetaArgs) {
@@ -31,5 +22,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  return <h1>{loaderData.stage?.title ?? "No stage found"}</h1>;
+  const { page, latestStages, locale } = loaderData;
+  return <Sections sections={page.sections} latestStages={latestStages} />;
 }

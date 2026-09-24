@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "prefectures",
+  "info": {
+    "singularName": "prefecture",
+    "pluralName": "prefectures",
+    "displayName": "Prefecture"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "code": {
+      "type": "integer"
+    },
+    "nameEn": {
+      "type": "string"
+    },
+    "nameJa": {
+      "type": "string"
+    },
+    "region": {
+      "type": "enumeration",
+      "enum": [
+        "kyushu",
+        "chugoku",
+        "shikoku",
+        "kinki",
+        "chubu",
+        "kanto",
+        "tohoku",
+        "hokkaido"
+      ]
+    },
+    "stages": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::stage.stage",
+      "inversedBy": "prefectures"
+    }
+  }
+}
