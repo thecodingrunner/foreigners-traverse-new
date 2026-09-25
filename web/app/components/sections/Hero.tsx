@@ -11,7 +11,7 @@ export default function Hero({
   introduction,
   totals,
 }: Props) {
-  const locale = getLocale();
+  const locale = getLocale(undefined);
   const t = useT();
   const num = new Intl.NumberFormat(locale === "ja" ? "ja-JP" : "en-GB");
 
@@ -30,7 +30,7 @@ export default function Hero({
           {heading}
         </h1>
 
-        <p className="text-body text-accent-foreground text-center w-full">
+        <p className="text-ui text-accent-foreground text-center w-full">
           {subheading}
         </p>
       </div>

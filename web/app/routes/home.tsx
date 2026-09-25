@@ -6,14 +6,16 @@ import { getRideTotals, getStages } from "~/data/stages.server";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
-  const[page, latestStages, totals] = await Promise.all([
+  const[page, latestStages, featuredStages, totals] = await Promise.all([
     getPage("home", locale),
-    getStages(locale, 3),
+    getStages(locale, { limit: 3 }),
+    getStages(locale, { limit: 4, filters: { featured: { eq: true } } }),
     getRideTotals(),
   ]);
   if (!page) throw new Response("Not Found", { status: 404 });
-  return {page, latestStages, totals, locale};
+  return {page, latestStages, featuredStages, totals, locale};
 }
+
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -23,6 +25,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { page, latestStages, totals, locale } = loaderData;
-  return <Sections sections={page.sections} latestStages={latestStages} totals={totals} />;
+  const { page, latestStages, featuredStages, totals, locale } = loaderData;
+  return <Sections sections={page.sections} latestStages={latestStages} totals={totals} featuredStages={featuredStages} />;
 }

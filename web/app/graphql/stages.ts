@@ -2,8 +2,8 @@
 import { graphql } from "~/gql";
 
 export const StagesQuery = graphql(`
-  query Stages($locale: I18NLocaleCode, $sort: [String], $limit: Int) {
-    stages(locale: $locale, sort: $sort, pagination: { limit: $limit }) {
+  query Stages($locale: I18NLocaleCode, $sort: [String], $limit: Int, $filters: StageFiltersInput) {
+    stages(locale: $locale, sort: $sort, pagination: { limit: $limit }, filters: $filters) {
       documentId
       slug
       stageNumber

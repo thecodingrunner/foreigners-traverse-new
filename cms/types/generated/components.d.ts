@@ -13,6 +13,16 @@ export interface GalleryGallery extends Struct.ComponentSchema {
   };
 }
 
+export interface SectionsFeaturedStages extends Struct.ComponentSchema {
+  collectionName: 'components_sections_featured_stages';
+  info: {
+    displayName: 'Featured Stages';
+  };
+  attributes: {
+    heading: Schema.Attribute.String;
+  };
+}
+
 export interface SectionsHero extends Struct.ComponentSchema {
   collectionName: 'components_sections_heroes';
   info: {
@@ -64,6 +74,7 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'gallery.gallery': GalleryGallery;
+      'sections.featured-stages': SectionsFeaturedStages;
       'sections.hero': SectionsHero;
       'seo.seo': SeoSeo;
       'stats.stats': StatsStats;

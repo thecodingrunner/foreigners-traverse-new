@@ -12,6 +12,9 @@ export const PageQuery = graphql(`
           introduction
           subheading
         }
+        ... on ComponentSectionsFeaturedStages {
+          heading
+        }
       }
     }
   }
