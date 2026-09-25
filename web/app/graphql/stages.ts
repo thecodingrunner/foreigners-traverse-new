@@ -45,3 +45,11 @@ export const StageQuery = graphql(`
     }
   }
 `);
+
+export const RideTotalsQuery = graphql(`
+  query RideTotals {
+    stages(pagination: { limit: 100 }) {
+      stats { distanceKm elevationGainM }
+    }
+  }
+`);
