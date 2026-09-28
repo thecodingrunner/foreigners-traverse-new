@@ -2,29 +2,28 @@ import type { Route } from "./+types/home";
 import { getLocale } from "~/lib/i18n";
 import { getPage } from "~/data/pages.server";
 import { Sections } from "~/components/sections/Sections";
-import { getRideTotals, getStages } from "~/data/stages.server";
+import { getFeaturedStages, getLatestStage, getRideTotals } from "~/data/stages.server";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
-  const[page, latestStages, featuredStages, totals] = await Promise.all([
+  const[page, latestStage, featuredStages, totals] = await Promise.all([
     getPage("home", locale),
-    getStages(locale, { limit: 3 }),
-    getStages(locale, { limit: 4, filters: { featured: { eq: true } } }),
+    getLatestStage(locale),
+    getFeaturedStages(locale, 4),
     getRideTotals(),
   ]);
   if (!page) throw new Response("Not Found", { status: 404 });
-  return {page, latestStages, featuredStages, totals, locale};
+  return {page, latestStage, featuredStages, totals, locale};
 }
 
-
-export function meta({}: Route.MetaArgs) {
+export function meta({ loaderData }: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: loaderData?.page.seo?.metaTitle ?? loaderData?.page.title ?? "Foreigners Traverse" },
+    { name: "description", content: loaderData?.page.seo?.metaDescription ?? "" },
   ];
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { page, latestStages, featuredStages, totals, locale } = loaderData;
-  return <Sections sections={page.sections} latestStages={latestStages} totals={totals} featuredStages={featuredStages} />;
+  const { page, latestStage, featuredStages, totals, locale } = loaderData;
+  return <Sections sections={page.sections} latestStage={latestStage} totals={totals} featuredStages={featuredStages} />;
 }

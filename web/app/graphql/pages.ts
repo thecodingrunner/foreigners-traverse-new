@@ -19,6 +19,15 @@ export const PageQuery = graphql(`
           heading
         }
       }
+      seo {
+        metaDescription
+        metaTitle
+        ogImage {
+          alternativeText
+          url
+          caption
+        }
+      }
     }
   }
 `);

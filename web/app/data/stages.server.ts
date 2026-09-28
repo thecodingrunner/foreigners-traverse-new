@@ -4,26 +4,45 @@ import type { StageFiltersInput } from "~/gql/graphql";
 import type { Locale } from "~/lib/i18n";
 
 type StagesOptions = {
-  limit?: number;
+  page?: number;
+  pageSize?: number;
   sort?: string[];
   filters?: StageFiltersInput;
 };
 
 export async function getStages(
   locale: Locale,
-  { limit = 100, sort = ["stageNumber:desc"], filters }: StagesOptions = {},
+  {
+    page = 1,
+    pageSize = 100,
+    sort = ["stageNumber:desc"],
+    filters,
+  }: StagesOptions = {},
 ) {
-  const { stages } = await strapi.request(StagesQuery, { locale, limit, sort, filters });
-  return (stages ?? []).filter((s) => s != null);
+  const { stages_connection } = await strapi.request(StagesQuery, {
+    locale,
+    page,
+    pageSize,
+    sort,
+    filters,
+  });
+  return {
+    stages: (stages_connection?.nodes ?? []).filter((s) => s != null),
+    pageInfo: stages_connection?.pageInfo ?? { page: 1, pageSize, pageCount: 0, total: 0 }
+  };
 }
 
 export async function getLatestStage(locale: Locale) {
-  const [latest] = await getStages(locale, { limit: 1 });
-  return latest ?? null;
+  const { stages } = await getStages(locale, { pageSize: 1 });
+  return stages[0] ?? null;
 }
 
 export async function getFeaturedStages(locale: Locale, limit = 3) {
-  return getStages(locale, { limit: limit + 1, filters: { featured: { eq: true } } });
+  const { stages } = await getStages(locale, {
+    pageSize: limit + 1,
+    filters: { featured: { eq: true } },
+  });
+  return stages;
 }
 
 export async function getStage(slug: string, locale: Locale) {
@@ -38,12 +57,13 @@ export async function getRideTotals() {
       distanceKm: totals.distanceKm + (s?.stats?.distanceKm ?? 0),
       elevationGainM: totals.elevationGainM + (s?.stats?.elevationGainM ?? 0),
       days: totals.days + (s ? 1 : 0),
+      prefectures: totals.prefectures + (s?.prefectures?.length ?? 0),
     }),
-    { distanceKm: 0, elevationGainM: 0, days: 0 },
+    { distanceKm: 0, elevationGainM: 0, days: 0, prefectures: 0 },
   );
 }
 
-export type Stages = Awaited<ReturnType<typeof getStages>>;
-export type StageSummary = Stages[number];
+export type StagesResult = Awaited<ReturnType<typeof getStages>>;
+export type StageSummary = StagesResult["stages"][number];
 export type StageDetail = NonNullable<Awaited<ReturnType<typeof getStage>>>;
 export type RideTotals = Awaited<ReturnType<typeof getRideTotals>>;

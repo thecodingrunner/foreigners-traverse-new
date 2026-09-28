@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 const NAV = [
   { key: "journal", path: "/journal" },
-  { key: "explore", path: "/explore" },
+  { key: "explore", path: "/journal?view=explore" },
   { key: "about", path: "/about" },
 ] as const;
 

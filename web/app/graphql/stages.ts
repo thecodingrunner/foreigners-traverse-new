@@ -2,20 +2,52 @@
 import { graphql } from "~/gql";
 
 export const StagesQuery = graphql(`
-  query Stages($locale: I18NLocaleCode, $sort: [String], $limit: Int, $filters: StageFiltersInput) {
-    stages(locale: $locale, sort: $sort, pagination: { limit: $limit }, filters: $filters) {
-      documentId
-      slug
-      stageNumber
-      date
-      title
-      excerpt
-      startName
-      endName
-      featured
-      stats { distanceKm elevationGainM }
-      coverImage { url alternativeText width height }
-      prefectures { code nameEn nameJa }
+  query Stages(
+    $locale: I18NLocaleCode
+    $sort: [String]
+    $page: Int
+    $pageSize: Int
+    $filters: StageFiltersInput
+  ) {
+    stages_connection(
+      locale: $locale
+      sort: $sort
+      pagination: { page: $page, pageSize: $pageSize }
+      filters: $filters
+    ) {
+      nodes {
+        documentId
+        slug
+        stageNumber
+        date
+        title
+        excerpt
+        startName
+        endName
+        featured
+        stats {
+          distanceKm
+          elevationGainM
+        }
+        coverImage {
+          url
+          alternativeText
+          width
+          height
+        }
+        prefectures {
+          code
+          nameEn
+          nameJa
+          region
+        }
+      }
+      pageInfo {
+        page
+        pageSize
+        pageCount
+        total
+      }
     }
   }
 `);
@@ -33,15 +65,49 @@ export const StageQuery = graphql(`
       startName
       endName
       routeFile
-      gpxFile { url }
-      stats {
-        distanceKm elevationGainM elevationLossM
-        movingTimeMin weather tempC sleptAt
+      gpxFile {
+        url
       }
-      coverImage { url alternativeText width height }
-      gallery { caption alt image { url alternativeText width height } }
-      prefectures { code nameEn nameJa region }
-      seo { metaTitle metaDescription ogImage { url width height } }
+      stats {
+        distanceKm
+        elevationGainM
+        elevationLossM
+        movingTimeMin
+        weather
+        tempC
+        sleptAt
+      }
+      coverImage {
+        url
+        alternativeText
+        width
+        height
+      }
+      gallery {
+        caption
+        alt
+        image {
+          url
+          alternativeText
+          width
+          height
+        }
+      }
+      prefectures {
+        code
+        nameEn
+        nameJa
+        region
+      }
+      seo {
+        metaTitle
+        metaDescription
+        ogImage {
+          url
+          width
+          height
+        }
+      }
     }
   }
 `);
@@ -49,7 +115,15 @@ export const StageQuery = graphql(`
 export const RideTotalsQuery = graphql(`
   query RideTotals {
     stages(pagination: { limit: 100 }) {
-      stats { distanceKm elevationGainM }
+      stats {
+        distanceKm
+        elevationGainM
+      }
+      prefectures {
+        code
+        nameEn
+        nameJa
+      }
     }
   }
 `);

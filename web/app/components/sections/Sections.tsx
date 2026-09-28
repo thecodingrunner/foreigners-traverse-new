@@ -1,19 +1,19 @@
 import type { Page } from "~/data/pages.server";
-import type { RideTotals, Stages } from "~/data/stages.server";
+import type { RideTotals, StageSummary } from "~/data/stages.server";
 import Hero from "./Hero";
 import FeaturedStages from "./LatestStages";
 import ExploreCTA from "./ExploreCTA";
 
 type Props = {
   sections: Page["sections"];
-  latestStages?: Stages;
-  featuredStages?: Stages;
+  latestStage?: StageSummary;
+  featuredStages?: StageSummary[];
   totals?: RideTotals;
 };
 
 export function Sections({
   sections,
-  latestStages = [],
+  latestStage,
   featuredStages = [],
   totals,
 }: Props) {
@@ -27,7 +27,7 @@ export function Sections({
         return (
           <FeaturedStages
             key={s.__typename}
-            latestStages={latestStages}
+            latestStages={latestStage}
             featuredStages={featuredStages}
             totals={totals}
           />

@@ -595,4 +595,74 @@ body {
     z-index: 1;
     pointer-events: none; /* so it never blocks clicks on anything inside */
   }
+
+  .view-toggle {
+    display: flex;
+    align-self: flex-start;
+    border: 1px solid var(--border-control);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .view-toggle-link {
+    padding: 12px 22px;
+    background: transparent;
+    color: var(--ink-3);
+
+    &[aria-current] {
+      background: var(--nibi);
+      color: var(--gofun);
+    }
+  }
+
+  .filter-chip {
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border-control);
+    color: var(--ink-2);
+
+    &[aria-current] {
+      background: var(--nibi);
+      color: var(--gofun);
+      border: 1px solid var(--nibi);
+    }
+
+    &:hover {
+      border: 1px solid var(--nibi);
+      color: var(--nibi);
+      background: var(--surface-2);
+    }
+  }
+
+  .pagination-link {
+    font-size: 13px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-control);
+    color: var(--ink-2);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &[aria-current] {
+      background: var(--nibi);
+      color: var(--gofun);
+      border: 1px solid var(--nibi);
+    }
+
+    &:hover {
+      border: 1px solid var(--nibi);
+      color: var(--nibi);
+      background: var(--surface-2);
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
 }

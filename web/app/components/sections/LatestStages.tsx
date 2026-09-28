@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import type { RideTotals, Stages } from "~/data/stages.server";
+import type { RideTotals, StageSummary } from "~/data/stages.server";
 import { useT } from "~/lib/dictionary";
 import StageRow from "../cards/StageRow";
 import { useEffect } from "react";
@@ -7,8 +7,8 @@ import { useLocale } from "~/lib/i18n";
 import FeaturedStageCard from "../cards/FeaturedStageCard";
 
 type FeaturedStagesProps = {
-  latestStages?: Stages;
-  featuredStages?: Stages;
+  latestStages?: StageSummary;
+  featuredStages?: StageSummary[];
   totals?: RideTotals;
 };
 

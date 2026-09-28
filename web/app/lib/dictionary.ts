@@ -28,9 +28,34 @@ const dictionary = {
     exploreCta: {
       label: "Route Explorer",
       title: "Ride it again in 3D",
-      subtitle: "Scrub through all 42 days over the terrain of Japan, stage by stage.",
+      subtitle:
+        "Scrub through all 42 days over the terrain of Japan, stage by stage.",
       buttonPrimary: "Open the explorer",
       buttonSecondary: "or use the 2D map",
+    },
+    journalArchive: {
+      title: "Journal Archive",
+      subtitle: (n: number, p: number) =>
+        `${n} entries, ${p} prefectures, one long road. 旅の記録`,
+      regions: {
+        kyushu: "Kyushu",
+        chugoku: "Chūgoku",
+        shikoku: "Shikoku",
+        kinki: "Kansai",
+        chubu: "Chūbu",
+        kanto: "Kantō",
+        tohoku: "Tōhoku",
+      },
+      all: "All",
+      viewToggle: {
+        grid: "Grid",
+        map: "Map",
+        explore: "3D",
+      },
+      pagination: {
+        previous: "Prev",
+        next: "Next",
+      },
     },
   },
   ja: {
@@ -55,6 +80,30 @@ const dictionary = {
       subtitle: "日本の地形の上で、42日間をステージごとにたどれます。",
       buttonPrimary: "エクスプローラーを開く",
       buttonSecondary: "2D地図で見る",
+    },
+    journalArchive: {
+      title: "旅の記録",
+      subtitle: (n: number, p: number) =>
+        `全${n}記事、${p}都道府県、一本の長い道。The journal`,
+      regions: {
+        kyushu: "九州",
+        chugoku: "中国",
+        shikoku: "四国",
+        kinki: "近畿",
+        chubu: "中部",
+        kanto: "関東",
+        tohoku: "東北",
+      },
+      all: "すべて",
+      viewToggle: {
+        grid: "グリッド",
+        map: "地図",
+        explore: "3D",
+      },
+      pagination: {
+        previous: "前へ",
+        next: "次へ",
+      },
     },
   },
 } satisfies Record<Locale, unknown>;
