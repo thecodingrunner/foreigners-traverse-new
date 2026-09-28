@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_sections_explore_ctas",
+  "info": {
+    "displayName": "Explore CTA",
+    "icon": "globe"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

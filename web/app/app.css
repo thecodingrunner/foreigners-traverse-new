@@ -31,6 +31,8 @@
   --border-subtle: #efece3;
   --border: #e3dfd5;
   --border-control: #cfc9bd;
+  --sky-zenith: #262427; /* top of frame */
+  --sky-horizon: #4a4547; /* horizon + fog */
 
   --tracking-h1: -0.035em;
   --tracking-prose: 0;
@@ -336,11 +338,11 @@ body {
   }
 
   .padding-x {
-    padding-inline: clamp(1rem, -2.875rem + 12.917vw, 8.75rem) !important;
+    padding-inline: clamp(1.25rem, -0.875rem + 7.083vw, 5.5rem);
   }
 
-  .padding-y {
-    padding-block: clamp(1.5rem, -0.625rem + 7.083vw, 5.75rem) !important;
+  .margin-y {
+    margin-block: clamp(2.25rem, 0.875rem + 4.583vw, 5rem);
   }
 
   .text-hero {
@@ -531,11 +533,66 @@ body {
     );
   }
 
-.header-styles {
-  @apply sticky top-0 z-50 flex items-center justify-between
+  .header-styles {
+    @apply sticky top-0 z-50 flex items-center justify-between
     border-b border-border bg-background/95 backdrop-blur
     py-1.5 pr-2 pl-5 md:px-22 md:py-5.5
     transition-transform duration-(--duration-base) ease-(--ease-out-soft)
     data-[hidden=true]:-translate-y-full;
-}
+  }
+
+  .explore-cta-card {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    align-items: stretch;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 1.45fr 1fr;
+    }
+  }
+
+  .explore-cta-card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(
+      180deg,
+      var(--nibi-deep) 0%,
+      var(--nibi) 60%,
+      var(--sky-horizon) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media (min-width: 1024px) {
+      height: 420px;
+      background: linear-gradient(
+        180deg,
+        var(--nibi-deep) 0%,
+        var(--nibi) 55%,
+        var(--sky-horizon) 100%
+      );
+    }
+  }
+
+  .explore-cta-card-image::after {
+    content: ""; /* required */
+    position: absolute;
+    left: 40%;
+    top: -10%;
+    width: 520px;
+    height: 520px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(149, 31, 31, 0.55) 0%,
+      rgba(149, 31, 31, 0.25) 42%,
+      rgba(149, 31, 31, 0) 72%
+    );
+    z-index: 1;
+    pointer-events: none; /* so it never blocks clicks on anything inside */
+  }
 }

@@ -50,7 +50,8 @@
       },
       "components": [
         "sections.hero",
-        "sections.featured-stages"
+        "sections.featured-stages",
+        "sections.explore-cta"
       ]
     }
   }

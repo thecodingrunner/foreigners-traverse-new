@@ -13,6 +13,17 @@ export interface GalleryGallery extends Struct.ComponentSchema {
   };
 }
 
+export interface SectionsExploreCta extends Struct.ComponentSchema {
+  collectionName: 'components_sections_explore_ctas';
+  info: {
+    displayName: 'Explore CTA';
+    icon: 'globe';
+  };
+  attributes: {
+    heading: Schema.Attribute.String;
+  };
+}
+
 export interface SectionsFeaturedStages extends Struct.ComponentSchema {
   collectionName: 'components_sections_featured_stages';
   info: {
@@ -74,6 +85,7 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'gallery.gallery': GalleryGallery;
+      'sections.explore-cta': SectionsExploreCta;
       'sections.featured-stages': SectionsFeaturedStages;
       'sections.hero': SectionsHero;
       'seo.seo': SeoSeo;

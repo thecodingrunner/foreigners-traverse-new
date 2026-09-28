@@ -16,3 +16,9 @@ export function formatDate(
 export function formatNumber(value: number, locale: Locale) {
     return new Intl.NumberFormat(INTL_LOCALE[locale]).format(value);
 }
+
+export function formatStageDay(stageNumber: number | null, locale: Locale): string {
+    if (!stageNumber) return "";
+    if (locale === "ja") return `${stageNumber}日目`;
+    return `Day ${stageNumber}`
+};

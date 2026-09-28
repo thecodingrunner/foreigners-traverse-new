@@ -15,6 +15,9 @@ export const PageQuery = graphql(`
         ... on ComponentSectionsFeaturedStages {
           heading
         }
+        ... on ComponentSectionsExploreCta {
+          heading
+        }
       }
     }
   }
