@@ -22,3 +22,7 @@ export function formatStageDay(stageNumber: number | null, locale: Locale): stri
     if (locale === "ja") return `${stageNumber}日目`;
     return `Day ${stageNumber}`
 };
+
+export function formatStartEnd(start: string, end: string): string {
+    return `${start} → ${end}`
+}

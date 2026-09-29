@@ -28,6 +28,7 @@ export const StagesQuery = graphql(`
         stats {
           distanceKm
           elevationGainM
+          movingTimeMin
         }
         coverImage {
           url
@@ -124,6 +125,18 @@ export const RideTotalsQuery = graphql(`
         nameEn
         nameJa
       }
+    }
+  }
+`);
+
+export const AdjacentStagesQuery = graphql(`
+  query AdjacentStages($numbers: [Int], $locale: I18NLocaleCode) {
+    stages(filters: { stageNumber: { in: $numbers } }, locale: $locale) {
+      slug
+      stageNumber
+      title
+      startName
+      endName
     }
   }
 `);

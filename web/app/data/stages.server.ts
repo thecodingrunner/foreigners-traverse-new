@@ -1,5 +1,5 @@
 import { strapi } from "~/lib/strapi.server";
-import { StagesQuery, RideTotalsQuery, StageQuery } from "~/graphql/stages";
+import { StagesQuery, RideTotalsQuery, StageQuery, AdjacentStagesQuery } from "~/graphql/stages";
 import type { StageFiltersInput } from "~/gql/graphql";
 import type { Locale } from "~/lib/i18n";
 
@@ -28,7 +28,12 @@ export async function getStages(
   });
   return {
     stages: (stages_connection?.nodes ?? []).filter((s) => s != null),
-    pageInfo: stages_connection?.pageInfo ?? { page: 1, pageSize, pageCount: 0, total: 0 }
+    pageInfo: stages_connection?.pageInfo ?? {
+      page: 1,
+      pageSize,
+      pageCount: 0,
+      total: 0,
+    },
   };
 }
 
@@ -63,7 +68,19 @@ export async function getRideTotals() {
   );
 }
 
+export async function getAdjacentStages(stageNumber: number, locale: Locale) {
+  const { stages } = await strapi.request(AdjacentStagesQuery, {
+    numbers: [stageNumber - 1, stageNumber + 1],
+    locale,
+  });
+  return {
+    prev: stages.find((s) => s?.stageNumber === stageNumber - 1) ?? null,
+    next: stages.find((s) => s?.stageNumber === stageNumber + 1) ?? null,
+  };
+}
+
 export type StagesResult = Awaited<ReturnType<typeof getStages>>;
 export type StageSummary = StagesResult["stages"][number];
 export type StageDetail = NonNullable<Awaited<ReturnType<typeof getStage>>>;
 export type RideTotals = Awaited<ReturnType<typeof getRideTotals>>;
+export type AdjacentStage = NonNullable<Awaited<ReturnType<typeof getAdjacentStages>>>;

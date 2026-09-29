@@ -57,6 +57,20 @@ const dictionary = {
         next: "Next",
       },
     },
+    stage: {
+      previous: "Previous",
+      next: "Next",
+      day: (n: number) => `Day ${n}`,
+      data: {
+        date: "Date",
+        route: "Route",
+        distance: "Distance",
+        elevation: "Elevation Gain",
+        movingTime: "Moving Time",
+        totalSoFar: "Total So Far",
+        explore: "View this stage in 3D →"
+      },
+    },
   },
   ja: {
     header: {
@@ -103,6 +117,20 @@ const dictionary = {
       pagination: {
         previous: "前へ",
         next: "次へ",
+      },
+    },
+    stage: {
+      previous: "前のステージ",
+      next: "次のステージ",
+      day: (n: number) => `${n}日目`,
+      data: {
+        date: "日付",
+        route: "ルート",
+        distance: "距離",
+        elevation: "獲得標高",
+        movingTime: "走行時間",
+        totalSoFar: "累計距離",
+        explore: "このステージを3Dで見る →"
       },
     },
   },

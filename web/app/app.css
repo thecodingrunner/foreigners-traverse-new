@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -663,6 +664,76 @@ body {
     &[aria-disabled="true"] {
       opacity: 0.4;
       pointer-events: none;
+    }
+  }
+
+  .stage-data-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(6, minmax(0, 1fr)) auto;
+    }
+  }
+
+  .stage-cover-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    height: 260px;
+    width: 100%;
+
+    img,
+    .image-placeholder-large {
+      transition: transform var(--duration-base) var(--ease-out-soft);
+    }
+
+    @media (min-width: 1024px) {
+      height: 460px;
+    }
+  }
+
+  .image-placeholder-stage {
+    /* height: 200px; */
+    width: 100%;
+    height: 100%;
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--placeholder-a) 0 12px,
+      var(--placeholder-b) 12px 24px
+    );
+  }
+
+  .stage-body {
+    padding: 24px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+
+    @media (min-width: 1024px) {
+      padding: 56px 0;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 72px;
+    }
+  }
+
+  .prose {
+    h4,
+    p {
+      font-family: var(--font-body) !important;
+      font-size: var(--text-body);
+      line-height: var(--text-body--line-height) !important;
+      color: var(--ink-2) !important;
+      font-weight: 400 !important;
+    }
+
+    h4 {
+      font-size: var(--text-prose);
+
+      em {
+        padding-left: 26px;
+        display: block;
+        border-left: 3px solid var(--akane);
+      }
     }
   }
 }
