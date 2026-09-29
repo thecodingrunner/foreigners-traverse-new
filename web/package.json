@@ -8,12 +8,14 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "codegen": "graphql-codegen -r dotenv/config",
-    "codegen:watch": "graphql-codegen -r dotenv/config --watch"
+    "codegen:watch": "graphql-codegen -r dotenv/config --watch",
+    "routes:preview": "node scripts/gpx-to-preview.mjs ../data/gpx ../data/previews"
   },
   "dependencies": {
     "@react-router/node": "^8.4.0",
     "@react-router/serve": "^8.4.0",
     "framer-motion": "^13.4.4",
+    "github-slugger": "^2.0.0",
     "graphql": "^16.14.2",
     "graphql-request": "^7.4.0",
     "isbot": "^5.1.36",
@@ -21,6 +23,7 @@
     "react-dom": "^19.2.8",
     "react-markdown": "^10.1.0",
     "react-router": "^8.4.0",
+    "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
@@ -29,9 +32,14 @@
     "@react-router/dev": "^8.4.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.2.2",
+    "@tmcw/togeojson": "^7.1.2",
+    "@turf/distance": "^7.4.0",
+    "@turf/helpers": "^7.4.0",
+    "@turf/simplify": "^7.4.0",
     "@types/node": "^22",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "@xmldom/xmldom": "^0.9.12",
     "dotenv": "^18.0.3",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",

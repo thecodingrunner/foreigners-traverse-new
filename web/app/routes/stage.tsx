@@ -9,6 +9,12 @@ import {
 } from "~/data/stages.server";
 import StageNav from "~/components/stage/StageNav";
 import StageHeader from "~/components/stage/StageHeader";
+import { extractHeadings } from "~/lib/markdown";
+import ElevationProfile from "~/components/stage/ElevationProfile";
+import TableOfContents from "~/components/stage/TableOfContents";
+import ElevationGraph from "~/components/stage/ElevationGraph";
+import { Link } from "react-router";
+import { useT } from "~/lib/dictionary";
 
 const SITE_URL = "https://foreigners-traverse.com";
 
@@ -17,6 +23,8 @@ export async function loader({ params }: Route.LoaderArgs) {
   const stage = await getStage(params.slug, locale);
   if (!stage) throw new Response("Not Found", { status: 404 });
 
+  const headings = stage.body ? extractHeadings(stage.body) : [];
+
   const totals = await getRideTotals();
 
   const { prev, next } =
@@ -24,7 +32,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       ? await getAdjacentStages(stage.stageNumber, locale)
       : { prev: null, next: null };
 
-  return { stage, prev, next, totals };
+  return { stage, prev, next, totals, headings };
 }
 
 export function meta({ loaderData }: Route.MetaArgs) {
@@ -53,17 +61,34 @@ export function meta({ loaderData }: Route.MetaArgs) {
 }
 
 export default function Stage({ loaderData }: Route.ComponentProps) {
-  const { stage, prev, next, totals } = loaderData;
+  const { stage, prev, next, totals, headings } = loaderData;
   const cover = stage.coverImage;
   const coverSrc = cover?.url;
+
+  const t = useT();
 
   console.log("totals: ", totals);
 
   console.log("stage body: ", stage.body);
 
   return (
-    <article className="padding-x my-10">
+    <article className="padding-x my-10 flex flex-col">
       <StageHeader stage={stage} totals={totals} />
+
+      <div className="flex flex-col gap-4 md:hidden">
+        {stage.routePreview && (
+          <ElevationGraph
+            profile={stage.routePreview.profile}
+            distanceKm={stage.routePreview.distanceKm}
+            displayLabels={false}
+          />
+        )}
+
+        <Link className="btn-secondary" to={`/journal?view=explore`}>
+          {t.stage.data.explore}
+        </Link>
+      </div>
+
 
       <div className="stage-cover-image mt-8">
         {coverSrc ? (
@@ -80,14 +105,23 @@ export default function Stage({ loaderData }: Route.ComponentProps) {
         )}
       </div>
 
-      <section className="stage-body">
+      <section className="stage-body scroll-smooth">
         <div className="prose">
           {stage.body && (
             <Markdown remarkPlugins={[remarkGfm]}>{stage.body}</Markdown>
           )}
         </div>
 
-        <div></div>
+        <div className="flex flex-col gap-12 lg:sticky lg:top-24 lg:self-start">
+          {stage.routePreview && stage.stageNumber != null && (
+            <ElevationProfile
+              profile={stage.routePreview.profile}
+              distanceKm={stage.routePreview.distanceKm}
+              stageNumber={stage.stageNumber}
+            />
+          )}
+          <TableOfContents headings={headings} />
+        </div>
       </section>
 
       <StageNav prev={prev} next={next} />

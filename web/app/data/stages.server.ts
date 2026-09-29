@@ -50,9 +50,17 @@ export async function getFeaturedStages(locale: Locale, limit = 3) {
   return stages;
 }
 
+export type RoutePreview = {
+  distanceKm: number;
+  line: [number, number][];     // [lon, lat]
+  profile: [number, number][];  // [km, elevation m]
+};
+
 export async function getStage(slug: string, locale: Locale) {
   const { stages } = await strapi.request(StageQuery, { slug, locale });
-  return stages[0] ?? null;
+  const stage = stages[0];
+  if (!stage) return null;
+  return { ...stage, routePreview: stage.routePreview as RoutePreview | null };
 }
 
 export async function getRideTotals() {

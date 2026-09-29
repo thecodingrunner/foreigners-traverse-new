@@ -25,6 +25,7 @@ export const StagesQuery = graphql(`
         startName
         endName
         featured
+        routePreview
         stats {
           distanceKm
           elevationGainM
@@ -66,6 +67,7 @@ export const StageQuery = graphql(`
       startName
       endName
       routeFile
+      routePreview
       gpxFile {
         url
       }

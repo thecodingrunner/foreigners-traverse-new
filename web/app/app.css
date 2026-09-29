@@ -166,6 +166,10 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer components {
   .btn-primary {
     justify-self: start;
@@ -201,6 +205,9 @@ body {
     letter-spacing: 0.12em;
     padding: 13px 21px;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
       border: 1px solid var(--nibi);

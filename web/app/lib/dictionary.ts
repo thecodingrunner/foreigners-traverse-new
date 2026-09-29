@@ -70,6 +70,10 @@ const dictionary = {
         totalSoFar: "Total So Far",
         explore: "View this stage in 3D →"
       },
+      elevationProfile: "Elevation Profile",
+      elevationLabel: (distanceKm: number, max: number) => `${distanceKm} km, ${max} m`,
+      viewIn3d: "View this stage in 3D",
+      onThisPage: "On this page",
     },
   },
   ja: {
@@ -132,6 +136,10 @@ const dictionary = {
         totalSoFar: "累計距離",
         explore: "このステージを3Dで見る →"
       },
+      elevationProfile: "標高プロフィール",
+      elevationLabel: (distanceKm: number, max: number) => `${distanceKm}km、${max}m`,
+      viewIn3d: "このステージを3Dで見る",
+      onThisPage: "目次",
     },
   },
 } satisfies Record<Locale, unknown>;

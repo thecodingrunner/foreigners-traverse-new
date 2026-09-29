@@ -622,6 +622,12 @@ export interface ApiStageStage extends Struct.CollectionTypeSchema {
           localized: false;
         };
       }>;
+    routePreview: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
     seo: Schema.Attribute.Component<'seo.seo', false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
