@@ -67,10 +67,6 @@ export default function Stage({ loaderData }: Route.ComponentProps) {
 
   const t = useT();
 
-  console.log("totals: ", totals);
-
-  console.log("stage body: ", stage.body);
-
   return (
     <article className="padding-x my-10 flex flex-col">
       <StageHeader stage={stage} totals={totals} />

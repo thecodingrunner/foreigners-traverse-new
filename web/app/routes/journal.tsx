@@ -14,8 +14,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   const region = parseRegion(url.searchParams.get("region"));
   const pageSize = 1;
 
-  console.log("region: ", region);
-
   const [page, { stages, pageInfo }, totals] = await Promise.all([
     getPage("journal", locale),
     getStages(locale, {
@@ -26,8 +24,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     }),
     getRideTotals(),
   ]);
-
-  console.log("stages: ", stages);
 
   if (!page) throw new Response("Not Found", { status: 404 });
   if (pageNumber > pageInfo.pageCount && pageNumber > 1) {

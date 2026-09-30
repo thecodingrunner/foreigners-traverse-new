@@ -9,6 +9,12 @@ const dictionary = {
         explore: "Explore 3D",
         about: "About",
       },
+      offCanvas: {
+        language: "Language",
+        languageSubtitle: "Switching keeps you on the same page.",
+      },
+      menu: "Menu",
+      close: "Close",
     },
     footer: {
       nav: {
@@ -68,10 +74,11 @@ const dictionary = {
         elevation: "Elevation Gain",
         movingTime: "Moving Time",
         totalSoFar: "Total So Far",
-        explore: "View this stage in 3D →"
+        explore: "View this stage in 3D →",
       },
       elevationProfile: "Elevation Profile",
-      elevationLabel: (distanceKm: number, max: number) => `${distanceKm} km, ${max} m`,
+      elevationLabel: (distanceKm: number, max: number) =>
+        `${distanceKm} km, ${max} m`,
       viewIn3d: "View this stage in 3D",
       onThisPage: "On this page",
     },
@@ -80,6 +87,12 @@ const dictionary = {
     header: {
       title: { main: "外人縦断", secondary: "Foreigners Traverse" },
       nav: { journal: "縦断日誌", explore: "3Dで見る", about: "概要" },
+      offCanvas: {
+        language: "言語",
+        languageSubtitle: "切り替えても、同じページのまま表示されます。",
+      },
+      menu: "メニュー",
+      close: "閉じる",
     },
     footer: {
       nav: { journal: "縦断日誌", explore: "3Dで見る", github: "Github" },
@@ -134,16 +147,21 @@ const dictionary = {
         elevation: "獲得標高",
         movingTime: "走行時間",
         totalSoFar: "累計距離",
-        explore: "このステージを3Dで見る →"
+        explore: "このステージを3Dで見る →",
       },
       elevationProfile: "標高プロフィール",
-      elevationLabel: (distanceKm: number, max: number) => `${distanceKm}km、${max}m`,
+      elevationLabel: (distanceKm: number, max: number) =>
+        `${distanceKm}km、${max}m`,
       viewIn3d: "このステージを3Dで見る",
       onThisPage: "目次",
     },
   },
 } satisfies Record<Locale, unknown>;
 
+export function getDictionary(locale: Locale) {
+  return dictionary[locale];
+}
+
 export function useT() {
-  return dictionary[useLocale()];
+  return getDictionary(useLocale());
 }

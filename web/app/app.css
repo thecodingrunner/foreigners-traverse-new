@@ -43,6 +43,12 @@
 
   --placeholder-a: #ece8de;
   --placeholder-b: #e3dfd3;
+
+  --header-height: 56px;
+
+  @media (min-width: 768px) {
+    --header-height: 88px;
+  }
 }
 
 .dark {
@@ -163,7 +169,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 html {
@@ -547,6 +553,7 @@ html {
     py-1.5 pr-2 pl-5 md:px-22 md:py-5.5
     transition-transform duration-(--duration-base) ease-(--ease-out-soft)
     data-[hidden=true]:-translate-y-full;
+    min-height: var(--header-height);
   }
 
   .explore-cta-card {
@@ -606,7 +613,7 @@ html {
 
   .view-toggle {
     display: flex;
-    align-self: flex-start;
+    align-self: flex-stretch;
     border: 1px solid var(--border-control);
     font-family: var(--font-mono);
     font-size: 11px;
@@ -618,6 +625,10 @@ html {
     padding: 12px 22px;
     background: transparent;
     color: var(--ink-3);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &[aria-current] {
       background: var(--nibi);
@@ -655,6 +666,8 @@ html {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    font-family: var(--font-mono);
+    flex: 1;
 
     &[aria-current] {
       background: var(--nibi);
@@ -724,6 +737,8 @@ html {
   }
 
   .prose {
+    max-width: none !important;
+
     h4,
     p {
       font-family: var(--font-body) !important;
@@ -740,6 +755,132 @@ html {
         padding-left: 26px;
         display: block;
         border-left: 3px solid var(--akane);
+      }
+    }
+  }
+
+  .nav-link {
+    color: var(--muted-foreground);
+    transition: color var(--duration-fast);
+
+    &:hover,
+    &[aria-current] {
+      color: var(--foreground);
+    }
+  }
+
+  .off-canvas {
+    position: fixed;
+    left: 0;
+    top: var(--header-height);
+    bottom: 0;
+    right: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    padding: 36px 20px 28px;
+    overflow: clip;
+    overscroll-behavior: contain;
+    background: var(--background);
+    transform: translateX(100%);
+    transition: transform var(--duration-base) var(--ease-out-soft);
+
+    &[data-open="true"] {
+      transform: translateX(0);
+    }
+
+    /* Decorative sun, bottom right */
+    &::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -90px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 65% 65%,
+        var(--akane) 0%,
+        var(--akane) 42%,
+        rgba(149, 31, 31, 0.45) 62%,
+        rgba(149, 31, 31, 0) 76%
+      );
+      pointer-events: none;
+    }
+
+    .off-canvas-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: var(--header-height);
+      padding: 6px 8px 6px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .off-canvas-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 36px 20px 32px;
+    }
+
+    .off-canvas-footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: auto;
+      padding-top: 48px;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .link-item {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+      align-items: baseline;
+      gap: 8px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--foreground);
+
+      .link-title {
+        transition: color var(--duration-base);
+      }
+
+      &:hover .link-title,
+      &[aria-current] .link-title {
+        color: var(--accent);
+      }
+    }
+
+    /* keep your existing .language-toggle and .language-toggle-link rules */
+
+    .language-toggle {
+      display: flex;
+      justify-content: stretch;
+      border: 1px solid var(--border-control);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+    }
+
+    .language-toggle-link {
+      flex: 1;
+      padding: 12px 22px;
+      background: transparent;
+      color: var(--ink-3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &[aria-current] {
+        background: var(--nibi);
+        color: var(--gofun);
       }
     }
   }

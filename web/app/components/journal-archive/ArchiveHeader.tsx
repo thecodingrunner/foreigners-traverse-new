@@ -26,7 +26,7 @@ export default function ArchiveHeader({ entryCount, prefectureCount }: Props) {
   };
 
   return (
-    <section className="flex items-end justify-between gap-10">
+    <section className="flex flex-col md:flex-row md:items-end justify-between gap-4.5 md:gap-10">
       <div className="flex flex-col items-start gap-6.5">
         <div>
           <h1 className="text-h2">{t.journalArchive.title}</h1>
@@ -36,7 +36,7 @@ export default function ArchiveHeader({ entryCount, prefectureCount }: Props) {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="items-center gap-2.5 flex-wrap hidden md:flex">
           <Link
             to={withParam("region", null)}
             aria-current={!activeRegion ? "true" : undefined}
@@ -59,7 +59,7 @@ export default function ArchiveHeader({ entryCount, prefectureCount }: Props) {
         </div>
       </div>
 
-      <div className="view-toggle self-end">
+      <div className="view-toggle md:self-end">
         {VIEWS.map((view) => (
           <Link
             key={view}

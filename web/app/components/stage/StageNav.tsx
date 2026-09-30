@@ -12,8 +12,6 @@ export default function StageNav({ prev, next }: StageNavProps) {
   const locale = useLocale();
   const t = useT();
 
-  console.log("prev: ", prev, "next: ", next);
-
   return (
     <nav className="flex flex-col md:flex-row justify-between border-t border-border pt-6">
       {prev ? (

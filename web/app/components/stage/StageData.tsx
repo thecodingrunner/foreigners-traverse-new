@@ -15,11 +15,7 @@ type DataItem = { label: string; value: string; className?: string };
 export default function StageData({ stage, totals }: StageDataProps) {
   const t = useT();
   const locale = useLocale();
-
-  useEffect(() => {
-    console.log("totals: ", totals);
-  }, [totals]);
-
+  
   const meta = [
     stage.date != null
       ? {

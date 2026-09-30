@@ -8,6 +8,7 @@ type StageRowProps = {
   locale: Locale;
 };
 
+
 export default function StageRow({ stage }: StageRowProps) {
   const locale = useLocale();
   const { stats, coverImage } = stage;

@@ -23,12 +23,6 @@ export default function FeaturedStages({
 
   const locale = useLocale();
 
-  useEffect(() => {
-    console.log("featured stages: ", featuredStages);
-    console.log("first stage: ", firstStage);
-    console.log("other stages: ", otherStages);
-  }, [featuredStages, firstStage, otherStages]);
-
   return (
     <div className="padding-x margin-y">
       <div className="flex items-end justify-between border-b border-border pb-5 mb-10">

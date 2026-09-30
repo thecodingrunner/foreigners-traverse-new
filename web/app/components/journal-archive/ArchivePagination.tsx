@@ -29,15 +29,13 @@ export default function ArchivePagination({
   const isFirst = page <= 1;
 
   return (
-    <section className="mt-16 pt-5 border-t border-nibi flex items-center justify-between gap-6 flex-wrap">
-      <div>
-        <p className="text-label text-muted-foreground">
-          Entries {(page - 1) * pageSize + 1} -{" "}
-          {Math.min(page * pageSize, entryCount)} of {entryCount}
-        </p>
-      </div>
+    <section className="md:mt-16 pt-5 border-t border-nibi flex items-center justify-between gap-6 w-full">
+      <p className="hidden md:block text-label text-muted-foreground">
+        Entries {(page - 1) * pageSize + 1} -{" "}
+        {Math.min(page * pageSize, entryCount)} of {entryCount}
+      </p>
 
-      <div className="flex gap-2 text-ui text-uppercase">
+      <div className="flex gap-2 text-ui text-uppercase justify-stretch w-full md:w-auto">
         {isFirst ? (
           <span className="pagination-link" aria-disabled="true">
             <span>←</span>
@@ -50,16 +48,22 @@ export default function ArchivePagination({
           </Link>
         )}
 
-        {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
-          <Link
-            key={n}
-            to={hrefFor(n)}
-            aria-current={n === page ? "page" : undefined}
-            className="pagination-link"
-          >
-            {n}
-          </Link>
-        ))}
+        <div className="gap-2 hidden md:flex">
+          {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
+            <Link
+              key={n}
+              to={hrefFor(n)}
+              aria-current={n === page ? "page" : undefined}
+              className="pagination-link"
+            >
+              {n}
+            </Link>
+          ))}
+        </div>
+
+        <div className="gap-2 flex md:hidden items-center text-label">
+          {page} / {pageCount} 
+        </div>
 
         {isLast ? (
           <span className="pagination-link" aria-disabled="true">
