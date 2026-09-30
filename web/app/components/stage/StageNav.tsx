@@ -13,8 +13,8 @@ export default function StageNav({ prev, next }: StageNavProps) {
   const locale = useLocale();
   const t = useT();
 
-  const prevRoute = routeLabel(prev, locale);
-  const nextRoute = routeLabel(next, locale);
+  const prevRoute = routeLabel(prev ?? {}, locale);
+  const nextRoute = routeLabel(next ?? {}, locale);
 
   return (
     <nav className="flex flex-col md:flex-row justify-between border-t border-border pt-6">

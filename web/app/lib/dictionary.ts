@@ -62,6 +62,12 @@ const dictionary = {
         previous: "Prev",
         next: "Next",
       },
+      map: {
+        route: "Route",
+        stageEnd: "Stage end",
+        stageStart: "Start / Finish",
+        hint: "Hover a stage to preview it",
+      },
     },
     stage: {
       previous: "Previous",
@@ -134,6 +140,12 @@ const dictionary = {
       pagination: {
         previous: "前へ",
         next: "次へ",
+      },
+      map: {
+        route: "ルート",
+        stageEnd: "ステージ終点",
+        stageStart: "出発 / 到着",
+        hint: "ステージにカーソルを合わせるとプレビュー",
       },
     },
     stage: {
