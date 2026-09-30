@@ -58,19 +58,19 @@
         }
       }
     },
-    "startName": {
+    "startNameEn": {
       "type": "string",
       "pluginOptions": {
         "i18n": {
-          "localized": true
+          "localized": false
         }
       }
     },
-    "endName": {
+    "endNameEn": {
       "type": "string",
       "pluginOptions": {
         "i18n": {
-          "localized": true
+          "localized": false
         }
       }
     },
@@ -158,6 +158,22 @@
     },
     "routePreview": {
       "type": "json",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "startNameJa": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
+    "endNameJa": {
+      "type": "string",
       "pluginOptions": {
         "i18n": {
           "localized": false

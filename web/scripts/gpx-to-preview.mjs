@@ -11,6 +11,7 @@ import { gpx } from "@tmcw/togeojson";
 import simplify from "@turf/simplify";
 import { lineString } from "@turf/helpers";
 import distance from "@turf/distance";
+import { readTrackCoords } from "./lib/gpx.mjs";
 
 const PROFILE_POINTS = 200; // points kept for the elevation chart
 const LINE_TOLERANCE = 0.0005; // simplification tolerance in degrees (~50 m)
@@ -21,17 +22,8 @@ async function processFile(inputPath, outputPath) {
   const geo = gpx(new DOMParser().parseFromString(xml, "text/xml"));
 
   // 1. Collect every point from every track/route segment: [lon, lat, ele]
-  const coords = geo.features
-    .flatMap((f) =>
-      f.geometry?.type === "LineString"
-        ? [f.geometry.coordinates]
-        : f.geometry?.type === "MultiLineString"
-          ? f.geometry.coordinates
-          : [],
-    )
-    .flat();
+  const coords = await readTrackCoords(inputPath);
 
-  if (coords.length < 2) throw new Error(`${inputPath}: no track points found`);
   if (coords.every((c) => c[2] == null)) {
     console.warn(`⚠ ${inputPath}: no elevation data; the profile will be flat`);
   }

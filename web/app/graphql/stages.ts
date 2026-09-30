@@ -22,8 +22,10 @@ export const StagesQuery = graphql(`
         date
         title
         excerpt
-        startName
-        endName
+        startNameEn
+        endNameEn
+        startNameJa
+        endNameJa
         featured
         routePreview
         stats {
@@ -64,8 +66,10 @@ export const StageQuery = graphql(`
       title
       excerpt
       body
-      startName
-      endName
+      startNameEn
+      endNameEn
+      startNameJa
+      endNameJa
       routeFile
       routePreview
       gpxFile {
@@ -137,8 +141,10 @@ export const AdjacentStagesQuery = graphql(`
       slug
       stageNumber
       title
-      startName
-      endName
+      startNameEn
+      startNameJa
+      endNameEn
+      endNameJa
     }
   }
 `);

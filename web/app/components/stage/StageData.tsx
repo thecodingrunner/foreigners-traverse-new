@@ -4,6 +4,7 @@ import type { RideTotals, StageDetail } from "~/data/stages.server";
 import { useT } from "~/lib/dictionary";
 import { formatDate, formatStartEnd } from "~/lib/format";
 import { useLocale } from "~/lib/i18n";
+import { placeName } from "~/lib/places";
 
 type StageDataProps = {
   stage: StageDetail;
@@ -15,7 +16,10 @@ type DataItem = { label: string; value: string; className?: string };
 export default function StageData({ stage, totals }: StageDataProps) {
   const t = useT();
   const locale = useLocale();
-  
+
+  const start = placeName(stage, "start", locale);
+  const end = placeName(stage, "end", locale);
+
   const meta = [
     stage.date != null
       ? {
@@ -27,12 +31,12 @@ export default function StageData({ stage, totals }: StageDataProps) {
           className: "hidden md:flex",
         }
       : null,
-    stage.startName != null && stage.endName != null
+    start != null && end != null
       ? {
           label: t.stage.data.route,
           value: formatStartEnd(
-            stage.startName as string,
-            stage.endName as string,
+            start.primary as string,
+            end.primary as string,
           ),
           className: "hidden md:flex",
         }

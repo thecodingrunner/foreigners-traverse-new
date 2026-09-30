@@ -9,7 +9,9 @@
     "typecheck": "react-router typegen && tsc",
     "codegen": "graphql-codegen -r dotenv/config",
     "codegen:watch": "graphql-codegen -r dotenv/config --watch",
-    "routes:preview": "node scripts/gpx-to-preview.mjs ../data/gpx ../data/previews"
+    "routes:preview": "node scripts/gpx-to-preview.mjs ../data/gpx ../data/previews",
+    "routes:geojson": "node scripts/gpx-to-geojson.mjs ../data/gpx public/routes/stages.geojson",
+    "routes": "npm run routes:preview && npm run routes:geojson"
   },
   "dependencies": {
     "@react-router/node": "^8.4.0",

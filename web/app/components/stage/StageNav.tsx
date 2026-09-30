@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { AdjacentStage } from "~/data/stages.server";
 import { useT } from "~/lib/dictionary";
 import { localePath, useLocale } from "~/lib/i18n";
+import { routeLabel } from "~/lib/places";
 
 type StageNavProps = {
   prev: AdjacentStage["prev"] | null;
@@ -11,6 +12,9 @@ type StageNavProps = {
 export default function StageNav({ prev, next }: StageNavProps) {
   const locale = useLocale();
   const t = useT();
+
+  const prevRoute = routeLabel(prev, locale);
+  const nextRoute = routeLabel(next, locale);
 
   return (
     <nav className="flex flex-col md:flex-row justify-between border-t border-border pt-6">
@@ -25,7 +29,7 @@ export default function StageNav({ prev, next }: StageNavProps) {
           </p>
           <h4 className="text-h4">{prev.title}</h4>
           <p className="text-ui">
-            {prev.startName} → {prev.endName}
+            {prevRoute}
           </p>
         </Link>
       ) : (
@@ -46,7 +50,7 @@ export default function StageNav({ prev, next }: StageNavProps) {
           </p>
           <h4 className="text-h4">{next.title}</h4>
           <p className="text-ui">
-            {next.startName} → {next.endName}
+            {nextRoute}
           </p>
         </Link>
       ) : (

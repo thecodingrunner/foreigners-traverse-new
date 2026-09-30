@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { StageSummary } from "~/data/stages.server";
 import { formatDate, formatNumber, formatStageDay } from "~/lib/format";
 import { useLocale } from "~/lib/i18n";
+import { placeName } from "~/lib/places";
 
 type FeaturedStageCardProps = {
   stage: StageSummary;
@@ -11,6 +12,9 @@ export default function FeaturedStageCard({ stage }: FeaturedStageCardProps) {
   const locale = useLocale();
 
   const { stats, coverImage } = stage;
+
+  const start = placeName(stage, "start", locale);
+  const end = placeName(stage, "end", locale);
 
   const meta = [
     stage.date &&
@@ -46,11 +50,11 @@ export default function FeaturedStageCard({ stage }: FeaturedStageCardProps) {
 
       {meta.length > 0 && <p className="text-label-sm">{meta.join(" · ")}</p>}
 
-      {(stage.startName || stage.endName) && (
+      {(start && end) && (
         <p className="text-ui hidden md:block">
-          {stage.startName}
+          {start.primary}
           <span className="text-accent"> → </span>
-          {stage.endName}
+          {end.primary}
         </p>
       )}
 
