@@ -66,7 +66,9 @@ const dictionary = {
         route: "Route",
         stageEnd: "Stage end",
         stageStart: "Start / Finish",
+        hintTouch: "Tap a stage to preview it",
         hint: "Hover a stage to preview it",
+        read: "Read",
       },
     },
     stage: {
@@ -145,7 +147,9 @@ const dictionary = {
         route: "ルート",
         stageEnd: "ステージ終点",
         stageStart: "出発 / 到着",
+        hintTouch: "ステージをタップするとプレビュー",
         hint: "ステージにカーソルを合わせるとプレビュー",
+        read: "読む",
       },
     },
     stage: {
