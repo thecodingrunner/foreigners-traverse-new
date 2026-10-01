@@ -130,9 +130,7 @@ export default function StageMap({
     setHovering(n != null);
     if (n != null && n !== activeStage) onActiveChange(n);
   };
-
-  console.log({ activeStage, active, activePoint });
-
+  
   return (
     <MapGL
       ref={mapRef}
