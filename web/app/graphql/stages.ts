@@ -22,8 +22,10 @@ export const StagesQuery = graphql(`
         date
         title
         excerpt
-        startName
-        endName
+        startNameEn
+        endNameEn
+        startNameJa
+        endNameJa
         featured
         routePreview
         stats {
@@ -64,8 +66,10 @@ export const StageQuery = graphql(`
       title
       excerpt
       body
-      startName
-      endName
+      startNameEn
+      endNameEn
+      startNameJa
+      endNameJa
       routeFile
       routePreview
       gpxFile {
@@ -137,8 +141,44 @@ export const AdjacentStagesQuery = graphql(`
       slug
       stageNumber
       title
-      startName
-      endName
+      startNameEn
+      startNameJa
+      endNameEn
+      endNameJa
+    }
+  }
+`);
+
+export const MapStagesQuery = graphql(`
+  query MapStages($locale: I18NLocaleCode) {
+    stages(
+      locale: $locale
+      sort: ["stageNumber:asc"]
+      pagination: { limit: 100 }
+    ) {
+      documentId
+      slug
+      stageNumber
+      date
+      title
+      excerpt
+      startNameEn
+      endNameEn
+      startNameJa
+      endNameJa
+      stats {
+        distanceKm
+        elevationGainM
+      }
+      coverImage {
+        url
+        alternativeText
+        width
+        height
+      }
+      prefectures {
+        region
+      }
     }
   }
 `);

@@ -2,16 +2,18 @@ import { Link } from "react-router";
 import type { StageSummary } from "~/data/stages.server";
 import { formatDate, formatNumber, formatStageDay } from "~/lib/format";
 import { localePath, useLocale, type Locale } from "~/lib/i18n";
+import { placeName, routeLabel } from "~/lib/places";
 
 type StageRowProps = {
   stage: StageSummary;
   locale: Locale;
 };
 
-
 export default function StageRow({ stage }: StageRowProps) {
   const locale = useLocale();
   const { stats, coverImage } = stage;
+
+  const route = routeLabel(stage, locale);
 
   const meta = [
     stage.stageNumber != null
@@ -66,11 +68,7 @@ export default function StageRow({ stage }: StageRowProps) {
 
         <h3 className="text-h5">{stage.title}</h3>
 
-        {(stage.startName || stage.endName) && (
-          <p className="text-ui hidden md:block">
-            {stage.startName} → {stage.endName}
-          </p>
-        )}
+        {route && <p className="text-ui hidden md:block">{route}</p>}
       </div>
     </Link>
   );

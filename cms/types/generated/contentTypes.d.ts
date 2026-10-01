@@ -579,10 +579,16 @@ export interface ApiStageStage extends Struct.CollectionTypeSchema {
           localized: false;
         };
       }>;
-    endName: Schema.Attribute.String &
+    endNameEn: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
+        };
+      }>;
+    endNameJa: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
         };
       }>;
     excerpt: Schema.Attribute.Text &
@@ -641,10 +647,16 @@ export interface ApiStageStage extends Struct.CollectionTypeSchema {
           localized: false;
         };
       }>;
-    startName: Schema.Attribute.String &
+    startNameEn: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
+        };
+      }>;
+    startNameJa: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
         };
       }>;
     stats: Schema.Attribute.Component<'stats.stats', false> &

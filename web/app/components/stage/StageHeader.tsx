@@ -3,6 +3,7 @@ import { useT } from "~/lib/dictionary";
 import { formatDate, formatStageDay, formatStartEnd } from "~/lib/format";
 import { useLocale } from "~/lib/i18n";
 import StageData from "./StageData";
+import { placeName } from "~/lib/places";
 
 type StageHeaderProps = {
   stage: StageDetail;
@@ -12,6 +13,9 @@ type StageHeaderProps = {
 export default function StageHeader({ stage, totals }: StageHeaderProps) {
   const t = useT();
   const locale = useLocale();
+
+  const start = placeName(stage, "start", locale);
+  const end = placeName(stage, "end", locale);
 
   const meta = [
     stage.stageNumber != null
@@ -23,8 +27,8 @@ export default function StageHeader({ stage, totals }: StageHeaderProps) {
           month: "short",
         })
       : null,
-    stage.startName != null && stage.endName != null
-      ? formatStartEnd(stage.startName, stage.endName)
+    start != null && end != null
+      ? formatStartEnd(start.primary, end.primary)
       : null,
   ].filter((item) => !!item);
 
