@@ -15,8 +15,7 @@ import TableOfContents from "~/components/stage/TableOfContents";
 import ElevationGraph from "~/components/stage/ElevationGraph";
 import { Link } from "react-router";
 import { useT } from "~/lib/dictionary";
-
-const SITE_URL = "https://foreigners-traverse.com";
+import { SITE_URL } from "~/lib/site";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
@@ -80,7 +79,7 @@ export default function Stage({ loaderData }: Route.ComponentProps) {
           />
         )}
 
-        <Link className="btn-secondary" to={`/journal?view=explore`}>
+        <Link className="btn-secondary" to={`/explore`}>
           {t.stage.data.explore}
         </Link>
       </div>

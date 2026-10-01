@@ -182,3 +182,22 @@ export const MapStagesQuery = graphql(`
     }
   }
 `);
+
+export const ExploreStagesQuery = graphql(`
+  query ExploreStages($locale: I18NLocaleCode) {
+    stages(locale: $locale, sort: ["stageNumber:asc"], pagination: { limit: 100 }) {
+      documentId
+      slug
+      stageNumber
+      date
+      title
+      excerpt
+      startNameEn
+      startNameJa
+      endNameEn
+      endNameJa
+      stats { distanceKm elevationGainM movingTimeMin }
+      prefectures { code nameEn nameJa region }
+    }
+  }
+`);

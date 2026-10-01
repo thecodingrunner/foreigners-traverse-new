@@ -16,7 +16,7 @@ export default function ExploreCTA() {
           <h3 className="text-h3 font-extrabold">{t.exploreCta.title}</h3>
           <p className="text-body  text-secondary-foreground/80">{t.exploreCta.subtitle}</p>
           <div className="flex gap-4 items-center justify-start">
-            <Link className="btn-primary flex gap-1 items-center" to="/journal?view=explore">{t.exploreCta.buttonPrimary} <span>→</span></Link>
+            <Link className="btn-primary flex gap-1 items-center" to="/explore">{t.exploreCta.buttonPrimary} <span>→</span></Link>
             <Link className="hidden md:block text-body text-secondary-foreground/80" to="/journal?view=map">{t.exploreCta.buttonSecondary}</Link>
           </div>
         </div>

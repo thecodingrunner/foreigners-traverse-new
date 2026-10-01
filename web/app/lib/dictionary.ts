@@ -90,6 +90,21 @@ const dictionary = {
       viewIn3d: "View this stage in 3D",
       onThisPage: "On this page",
     },
+    explore: {
+      day: (n: number) => `Day ${n}`,
+      back: "Journal",
+      cameraLabel: "Camera",
+      modes: { overview: "Overview", follow: "Follow", orbit: "Orbit" },
+      stats: {
+        distance: "Distance",
+        elevationGain: "Elevation Gain",
+        movingTime: "Moving Time",
+        totalSoFar: "Total So Far",
+      },
+      panelLabel: "Stage Information",
+      readEntry: "Read Entry",
+      timelineLabel: "Timeline",
+    },
   },
   ja: {
     header: {
@@ -170,6 +185,21 @@ const dictionary = {
         `${distanceKm}km、${max}m`,
       viewIn3d: "このステージを3Dで見る",
       onThisPage: "目次",
+    },
+    explore: {
+      day: (n: number) => `${n}日目`,
+      back: "記録",
+      cameraLabel: "カメラ",
+      modes: { overview: "全体", follow: "追従", orbit: "周回" },
+      stats: {
+        distance: "距離",
+        elevationGain: "獲得標高",
+        movingTime: "走行時間",
+        totalSoFar: "累計距離",
+      },
+      panelLabel: "ステージ情報",
+      readEntry: "記事を読む",
+      timelineLabel: "ステージタイムライン",
     },
   },
 } satisfies Record<Locale, unknown>;
