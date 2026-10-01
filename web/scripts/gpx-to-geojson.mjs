@@ -47,7 +47,7 @@ for (const [i, { file, stageNumber }] of files.entries()) {
   if (i === 0) {
     points.push({
       type: "Feature",
-      properties: { stageNumber },
+      properties: { stageNumber, kind: "start" },
       geometry: { type: "Point", coordinates: round(coords[0]) },
     });
   }
