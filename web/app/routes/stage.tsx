@@ -38,7 +38,6 @@ export async function loader({ params }: Route.LoaderArgs) {
     next,
     totals,
     headings,
-    mediaBase: process.env.STRAPI_PUBLIC_URL ?? "",
   };
 }
 
@@ -68,9 +67,9 @@ export function meta({ loaderData }: Route.MetaArgs) {
 }
 
 export default function Stage({ loaderData }: Route.ComponentProps) {
-  const { stage, prev, next, totals, headings, mediaBase } = loaderData;
+  const { stage, prev, next, totals, headings } = loaderData;
   const cover = stage.coverImage;
-  const coverSrc = strapiMedia(cover?.url, mediaBase);
+  const coverSrc = strapiMedia(cover?.url);
 
   const t = useT();
 
