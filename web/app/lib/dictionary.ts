@@ -104,6 +104,9 @@ const dictionary = {
       panelLabel: "Stage Information",
       readEntry: "Read Entry",
       timelineLabel: "Timeline",
+      play: "Play",
+      pause: "Pause",
+      speed: "Speed",
     },
   },
   ja: {
@@ -200,6 +203,9 @@ const dictionary = {
       panelLabel: "ステージ情報",
       readEntry: "記事を読む",
       timelineLabel: "ステージタイムライン",
+      play: "再生",
+      pause: "一時停止",
+      speed: "速度",
     },
   },
 } satisfies Record<Locale, unknown>;
