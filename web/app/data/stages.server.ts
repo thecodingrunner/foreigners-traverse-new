@@ -65,9 +65,14 @@ export async function getStage(slug: string, locale: Locale) {
   return { ...stage, routePreview: stage.routePreview as RoutePreview | null };
 }
 
+const round = (n: number, dp: number) => {
+  const f = 10 ** dp;
+  return Math.round(n * f) / f;
+};
+
 export async function getRideTotals() {
   const { stages } = await strapi.request(RideTotalsQuery);
-  return stages.reduce(
+  const totals = stages.reduce(
     (totals, s) => ({
       distanceKm: totals.distanceKm + (s?.stats?.distanceKm ?? 0),
       elevationGainM: totals.elevationGainM + (s?.stats?.elevationGainM ?? 0),
@@ -76,6 +81,12 @@ export async function getRideTotals() {
     }),
     { distanceKm: 0, elevationGainM: 0, days: 0, prefectures: 0 },
   );
+
+  return {
+    ...totals,
+    distanceKm: round(totals.distanceKm, 1),
+    elevationGainM: round(totals.elevationGainM, 1)
+  }
 }
 
 export async function getAdjacentStages(stageNumber: number, locale: Locale) {
