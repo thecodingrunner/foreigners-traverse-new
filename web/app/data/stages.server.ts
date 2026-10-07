@@ -3,6 +3,8 @@ import { StagesQuery, RideTotalsQuery, StageQuery, AdjacentStagesQuery, MapStage
 import type { StageFiltersInput } from "~/gql/graphql";
 import type { Locale } from "~/lib/i18n";
 
+const MEDIA_BASE = process.env.STRAPI_PUBLIC_URL ?? "";
+
 type StagesOptions = {
   page?: number;
   pageSize?: number;
