@@ -63,7 +63,7 @@ export default function ArchiveHeader({ entryCount, prefectureCount }: Props) {
         {VIEWS.map((view) => (
           <Link
             key={view}
-            to={withParam("view", view === "grid" ? null : view)}
+            to={view === "explore" ? "/explore" : withParam("view", view === "grid" ? null : view)}
             aria-current={activeView === view ? "true" : undefined}
             preventScrollReset
             className="view-toggle-link"

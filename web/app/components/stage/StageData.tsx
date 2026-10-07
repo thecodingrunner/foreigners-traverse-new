@@ -79,7 +79,7 @@ export default function StageData({ stage, totals }: StageDataProps) {
         </div>
       ))}
       <div className="items-center lg:pl-3 hidden md:flex w-auto flex-1">
-        <Link className="btn-primary" to={`/journal?view=explore`}>
+        <Link className="btn-primary" to={`/explore`}>
           {t.stage.data.explore}
         </Link>
       </div>

@@ -22,7 +22,7 @@ export default function ElevationProfile({ profile, distanceKm, stageNumber }: E
             <ElevationGraph profile={profile} distanceKm={distanceKm} />
 
             <Link
-                to={localePath(`/journal?view=explore`, locale)}
+                to={localePath(`/explore`, locale)}
                 className="mt-5 block border-t border-border pt-5 text-label text-accent"
             >
                 {t.stage.viewIn3d} →
