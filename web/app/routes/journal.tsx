@@ -10,7 +10,7 @@ import { useRouteLoaderData } from "react-router";
 import type { loader as layoutLoader } from "./locale-layout";
 import ArchiveMapView from "~/components/journal-archive/ArchiveMapView";
 
-const PAGE_SIZE = 1;
+const PAGE_SIZE = 9;
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
@@ -42,7 +42,12 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  return { view, page, stages, pageInfo } as const;
+  return {
+    view,
+    page,
+    stages,
+    pageInfo,
+  } as const;
 }
 
 export function meta({ loaderData }: Route.MetaArgs) {
