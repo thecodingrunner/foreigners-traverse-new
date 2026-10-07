@@ -22,13 +22,13 @@ export default function StageNav({ prev, next }: StageNavProps) {
         <Link
           to={localePath(`/journal/${prev.slug}`, locale)}
           rel="prev"
-          className="flex flex-col items-start gap-2 py-7 flex-1"
+          className="flex flex-col items-start gap-2 py-7 flex-1 group"
         >
           <p className="text-label">
             ← Previous · {t.stage.day(prev.stageNumber ?? 0)}
           </p>
-          <h4 className="text-h4">{prev.title}</h4>
-          <p className="text-ui">
+          <h4 className="text-h4 max-w-80 text-wrap group-hover:text-accent transition-color duration-350">{prev.title}</h4>
+          <p className="text-ui max-w-80">
             {prevRoute}
           </p>
         </Link>
@@ -43,13 +43,13 @@ export default function StageNav({ prev, next }: StageNavProps) {
         <Link
           to={localePath(`/journal/${next.slug}`, locale)}
           rel="next"
-          className="flex flex-col items-end gap-2 py-7 flex-1"
+          className="flex flex-col items-end gap-2 py-7 flex-1 group"
         >
           <p className="text-label">
             {t.stage.day(next.stageNumber ?? 0)} · Next →
           </p>
-          <h4 className="text-h4">{next.title}</h4>
-          <p className="text-ui">
+          <h4 className="text-h4 max-w-80 text-wrap text-right group-hover:text-accent transition-color duration-350">{next.title}</h4>
+          <p className="text-ui max-w-80">
             {nextRoute}
           </p>
         </Link>
