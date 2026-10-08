@@ -11,7 +11,10 @@
     "codegen:watch": "graphql-codegen -r dotenv/config --watch",
     "routes:preview": "node scripts/gpx-to-preview.mjs ../data/gpx ../data/previews",
     "routes:geojson": "node scripts/gpx-to-geojson.mjs ../data/gpx public/routes/stages.geojson",
-    "routes": "npm run routes:preview && npm run routes:geojson"
+    "routes": "npm run routes:preview && npm run routes:geojson",
+    "explore:terrain": "node scripts/build-terrain.mjs",
+    "explore:route": "node scripts/build-route3d.mjs",
+    "explore:assets": "npm run explore:terrain && npm run explore:route"    
   },
   "dependencies": {
     "@react-router/node": "^8.4.0",
@@ -46,6 +49,7 @@
     "@types/react-dom": "^19.2.7",
     "@xmldom/xmldom": "^0.9.12",
     "dotenv": "^18.0.3",
+    "pngjs": "^7.0.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
     "vite": "^8.0.3"
