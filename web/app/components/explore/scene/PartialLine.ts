@@ -19,6 +19,7 @@ export class PartialLine {
     const geometry = new LineGeometry();
     geometry.setPositions(positions);
     this.line = new Line2(geometry, material);
+    this.line.computeLineDistances();
     this.line.frustumCulled = false;
     this.source = positions;
     this.segmentCount = positions.length / 3 - 1;
