@@ -185,47 +185,63 @@ const preview = new PNG({ width: WIDTH, height: HEIGHT });
 let maxElevation = 0;
 
 for (let p = 0; p < WIDTH * HEIGHT; p++) {
-    const h = elevation[p];
-    const isLand = !Number.isNaN(h);
-    const value = isLand
-        ? Math.min(65535, Math.max(1, Math.round((h + ELEV_OFFSET_M) / ELEV_STEP_M)))
-        : 0;
-    const distKm = distancePx[p] * kmPerPixel;
-    const i = p * 4;
+  const h = elevation[p];
+  const isLand = !Number.isNaN(h);
+  const value = isLand
+    ? Math.min(
+        65535,
+        Math.max(1, Math.round((h + ELEV_OFFSET_M) / ELEV_STEP_M)),
+      )
+    : 0;
+  const distKm = distancePx[p] * kmPerPixel;
+  const i = p * 4;
 
-    terrain.data[i] = value >> 8;     // R: elevation, high byte
-    terrain.data[i + 1] = value & 255; // G: elevation, low byte
-    terrain.data[i + 2] = Math.round(Math.min(1, distKm / DIST_MAX_KM) * 255); // B: distance
-    terrain.data[i + 3] = isLand ? 255 : 0; // A: land or sea
+  terrain.data[i] = value >> 8; // R: elevation, high byte
+  terrain.data[i + 1] = value & 255; // G: elevation, low byte
+  terrain.data[i + 2] = Math.round(Math.min(1, distKm / DIST_MAX_KM) * 255); // B: distance
+  terrain.data[i + 3] = 255; // A: always opaque (RGB output; sea lives in R+G = 0)
 
-    if (isLand) maxElevation = Math.max(maxElevation, h);
-    const shade = isLand ? 60 + Math.min(195, h / 12) : 20;
-    const onRoute = routeMask[p] === 1;
-    preview.data[i] = onRoute ? 220 : shade;
-    preview.data[i + 1] = onRoute ? 40 : shade;
-    preview.data[i + 2] = onRoute ? 40 : shade;
-    preview.data[i + 3] = 255;
+  if (isLand) maxElevation = Math.max(maxElevation, h);
+  const shade = isLand ? 60 + Math.min(195, h / 12) : 20;
+  const onRoute = routeMask[p] === 1;
+  preview.data[i] = onRoute ? 220 : shade;
+  preview.data[i + 1] = onRoute ? 40 : shade;
+  preview.data[i + 2] = onRoute ? 40 : shade;
+  preview.data[i + 3] = 255;
 }
 
 await mkdir(OUT_DIR, { recursive: true });
-await writeFile(path.join(OUT_DIR, "terrain.png"), PNG.sync.write(terrain, { colorType: 2 }));
+await writeFile(
+  path.join(OUT_DIR, "terrain.png"),
+  PNG.sync.write(terrain, { colorType: 2 }),
+);
 await writeFile(PREVIEW_FILE, PNG.sync.write(preview, { colorType: 2 }));
 
 const meta = {
-    version: 1,
-    width: WIDTH,
-    height: HEIGHT,
-    bounds,
-    projection: { lon0: projection.lon0, lat0: projection.lat0, kx: projection.kx, kz: projection.kz },
-    scene: { minX, minZ, maxX, maxZ },
-    elevation: {
-        offsetM: ELEV_OFFSET_M,
-        stepM: ELEV_STEP_M,
-        maxM: Math.round(maxElevation),
-    },
-    distance: { maxKm: DIST_MAX_KM },
-    attribution: "出典：国土地理院",
+  version: 1,
+  width: WIDTH,
+  height: HEIGHT,
+  bounds,
+  projection: {
+    lon0: projection.lon0,
+    lat0: projection.lat0,
+    kx: projection.kx,
+    kz: projection.kz,
+  },
+  scene: { minX, minZ, maxX, maxZ },
+  elevation: {
+    offsetM: ELEV_OFFSET_M,
+    stepM: ELEV_STEP_M,
+    maxM: Math.round(maxElevation),
+  },
+  distance: { maxKm: DIST_MAX_KM },
+  attribution: "出典：国土地理院",
 };
-await writeFile(path.join(OUT_DIR, "terrain.json"), JSON.stringify(meta, null, 2));
+await writeFile(
+  path.join(OUT_DIR, "terrain.json"),
+  JSON.stringify(meta, null, 2),
+);
 
-console.log(`Done. Highest point ${Math.round(maxElevation)} m. Preview: ${PREVIEW_FILE}`);
+console.log(
+  `Done. Highest point ${Math.round(maxElevation)} m. Preview: ${PREVIEW_FILE}`,
+);
