@@ -1350,4 +1350,132 @@ html {
     border: 3px solid var(--akane);
     pointer-events: none;
   }
+
+  /* Explore view styles */
+
+  /* Layers: glow (::before) → canvas → labels → panel */
+  .explore-viewport {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .explore-scene,
+  .scene-labels {
+    position: absolute;
+    inset: 0;
+  }
+
+  .scene-labels {
+    overflow: hidden;
+    pointer-events: none; /* let drags reach the canvas */
+  }
+
+  .explore-panel {
+    z-index: 3; /* was 1: must sit above the scene labels */
+  }
+
+  /* Loading */
+  .scene-status {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: var(--gofun);
+  }
+
+  .scene-status-percent {
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .scene-status-bar {
+    width: min(320px, 70%);
+    height: 3px;
+    background: rgb(252 251 246 / 0.2);
+
+    span {
+      display: block;
+      height: 100%;
+      background: var(--akane-light);
+      transition: width var(--duration-fast);
+    }
+  }
+
+  /* No WebGL / error */
+  .scene-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    gap: 16px;
+    width: min(560px, calc(100% - 32px));
+    padding: 36px;
+    transform: translate(-50%, -50%);
+    background: rgb(38 36 39 / 0.85);
+    border: 1px solid rgb(252 251 246 / 0.15);
+    color: var(--gofun);
+
+    .text-body {
+      color: rgb(252 251 246 / 0.75);
+    }
+  }
+
+  /* Scene markers */
+  .scene-stage-end {
+    display: block;
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgb(252 251 246 / 0.6);
+    background: var(--nibi);
+    cursor: pointer;
+    pointer-events: auto;
+
+    &[data-state="ridden"] {
+      background: var(--gofun);
+      border-color: var(--gofun);
+    }
+    &[data-state="current"] {
+      background: var(--akane-light);
+      border-color: var(--gofun);
+    }
+    &:hover {
+      transform: scale(1.4);
+    }
+  }
+
+  .scene-square {
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: var(--akane);
+    outline: 2px solid var(--gofun);
+  }
+
+  .scene-city {
+    margin-left: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--gofun);
+  }
+
+  .scene-rider {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--akane);
+    border: 3px solid var(--gofun);
+    box-shadow: 0 0 0 3px var(--akane);
+  }
 }
