@@ -12,6 +12,7 @@ import OverviewCamera from "./OverviewCamera";
 import RouteLines from "./RouteLines";
 import Terrain from "./Terrain";
 import { OrbitControls } from "@react-three/drei";
+import SceneFog from "./SceneFog";
 
 type Props = {
   assets: ExploreAssets;
@@ -30,7 +31,7 @@ export default function ExploreScene({ assets, stages, onContextLost }: Props) {
         className="explore-canvas"
         frameloop="demand"
         dpr={[1, isMobile ? 1.5 : 2]}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: true, stencil: true }}
         camera={{ fov: 35, near: 5, far: 20000 }}
         onCreated={({ gl }) => {
           gl.domElement.addEventListener("webglcontextlost", (event) => {
@@ -40,6 +41,8 @@ export default function ExploreScene({ assets, stages, onContextLost }: Props) {
         }}
       >
         <OverviewCamera route={assets.route} />
+
+        <SceneFog color={colors.skyHorizon} />
 
         <OrbitControls />
 
