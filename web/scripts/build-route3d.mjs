@@ -88,7 +88,7 @@ for (const { file, stageNumber, coords } of stages) {
     stageNumber,
     km: Math.round(totalKm * 10) / 10,
     positions,
-    t: along.map((d) => Math.round(d / totalKm + 10000) / 10000),
+    t: along.map((d) => Math.round(d / totalKm * 10000) / 10000),
   });
 
   console.log(
