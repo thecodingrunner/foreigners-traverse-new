@@ -1,16 +1,19 @@
 import { useEffect, useMemo } from "react";
 import {
-  Color,
   NearestFilter,
   NoColorSpace,
   PlaneGeometry,
-  Texture,
+  RGBAFormat,
+  UniformsLib,
+  UniformsUtils,
+  UnsignedByteType,
   Vector2,
+  Texture,
   Vector4,
 } from "three";
 import type { TerrainMeta } from "./assets";
-import type { SceneColors } from "./colors";
-import { EXAGGERATION } from "./constants";
+import { toSRGB, toSRGBA, type SceneColors } from "./colors";
+import { CONTOUR_STEP_M, EDGE_FADE, EXAGGERATION, HIGH_GROUND_M, SUN_DIRECTION } from "./constants";
 import { terrainFragmentShader, terrainVertexShader } from "./terrainShader";
 
 type Props = {
@@ -52,19 +55,29 @@ export default function Terrain({ meta, heightmap, colors, segments }: Props) {
 
   const uniforms = useMemo(
     () => ({
+      // Custom shaders don't get fog for free: they need three's fog uniforms
+      // (filled in by the renderer from scene.fog) plus the fog shader chunks.
+      ...UniformsUtils.clone(UniformsLib.fog),
+
       uHeightmap: { value: texture },
+      uSize: { value: new Vector2(meta.width, meta.height) },
+      uElevation: { value: new Vector2(meta.elevation.offsetM, meta.elevation.stepM) },
       uBounds: { value: new Vector4(minX, minZ, width, depth) },
-      uTexel: { value: new Vector2(1 / meta.width, 1 / meta.height) },
-      uKmPerTexel: {
-        value: new Vector2(width / meta.width, depth / meta.height),
-      },
-      uElevation: {
-        value: new Vector2(meta.elevation.offsetM, meta.elevation.stepM),
-      },
+      uKmPerTexel: { value: new Vector2(width / meta.width, depth / meta.height) },
       uExaggeration: { value: EXAGGERATION },
-      uLand: { value: new Color(colors.land) },
-      uLandLit: { value: new Color(colors.landLit) },
-      uGlow: { value: new Color(colors.glow) },
+      uSunDirection: { value: SUN_DIRECTION },
+      uHighGroundM: { value: HIGH_GROUND_M },
+      uContourStepM: { value: new Vector2(...CONTOUR_STEP_M) },
+      uEdgeFade: { value: EDGE_FADE },
+
+      uSea: { value: toSRGB(colors.sea) },
+      uTerrainBase: { value: toSRGB(colors.terrainBase) },
+      uTerrainHigh: { value: toSRGB(colors.terrainHigh) },
+      uHillshadeLight: { value: toSRGB(colors.hillshadeLight) },
+      uHillshadeShadow: { value: toSRGB(colors.hillshadeShadow) },
+      uContourMinor: { value: toSRGBA(colors.contourMinor) },
+      uContourMajor: { value: toSRGBA(colors.contourMajor) },
+      uCoastline: { value: toSRGBA({ ...colors.coastline, alpha: 0.6 }) },
     }),
     [texture, meta, minX, minZ, width, depth, colors],
   );
@@ -73,11 +86,13 @@ export default function Terrain({ meta, heightmap, colors, segments }: Props) {
   useEffect(() => () => geometry.dispose(), [geometry]);
 
   return (
-    <mesh geometry={geometry} frustumCulled={false}>
+    <mesh geometry={geometry} frustumCulled={false} renderOrder={0}>
         <shaderMaterial
             vertexShader={terrainVertexShader}
             fragmentShader={terrainFragmentShader}
             uniforms={uniforms}
+            fog
+            transparent
             polygonOffset
             polygonOffsetFactor={1}
             polygonOffsetUnits={1}
