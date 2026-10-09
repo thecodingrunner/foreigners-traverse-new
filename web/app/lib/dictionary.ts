@@ -107,6 +107,18 @@ const dictionary = {
       play: "Play",
       pause: "Pause",
       speed: "Speed",
+      loadingTitle: "Loading terrain",
+      loadingDetail: (loaded: string, total: string | null) =>
+        total ? `${loaded} of ${total} MB` : `${loaded} MB`,
+      noglTag: "WebGL unavailable",
+      noglTitle: "The 3D view can't start on this device",
+      noglBody:
+        "Your browser couldn't create a WebGL context. Every stage is also on the 2D map, with the same stats and entries.",
+      noglCta: "Open the 2D map",
+      errorTitle: "The 3D view couldn't load",
+      errorBody:
+        "Something went wrong loading the terrain. Try again, or use the 2D map.",
+      retry: "Try again",
     },
   },
   ja: {
@@ -206,6 +218,18 @@ const dictionary = {
       play: "再生",
       pause: "一時停止",
       speed: "速度",
+      loadingTitle: "地形を読み込み中",
+      loadingDetail: (loaded: string, total: string | null) =>
+        total ? `${loaded} / ${total} MB` : `${loaded} MB`,
+      noglTag: "WebGL非対応",
+      noglTitle: "この端末では3D表示を開始できません",
+      noglBody:
+        "ブラウザでWebGLを利用できませんでした。すべてのステージは、同じデータと記事とともに2D地図でご覧いただけます。",
+      noglCta: "2D地図を開く",
+      errorTitle: "3D表示を読み込めませんでした",
+      errorBody:
+        "地形の読み込み中に問題が発生しました。もう一度試すか、2D地図をご利用ください。",
+      retry: "再試行",
     },
   },
 } satisfies Record<Locale, unknown>;
