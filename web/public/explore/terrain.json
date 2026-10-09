@@ -23,7 +23,7 @@
   "elevation": {
     "offsetM": 100,
     "stepM": 0.1,
-    "maxM": 36505
+    "maxM": 3650
   },
   "distance": {
     "maxKm": 80
