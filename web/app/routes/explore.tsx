@@ -17,6 +17,8 @@ import { useMemo } from "react";
 import { ExploreStoreProvider, useExplore } from "~/stores/explore-context";
 import { usePlayback } from "~/hooks/usePlayback";
 import { useExploreUrlSync } from "~/hooks/useExploreUrlSync";
+import type { ShouldRevalidateFunctionArgs } from "react-router";
+import ExploreViewport from "~/components/explore/ExploreViewport";
 
 const notFound = () => new Response("Not Found", { status: 404 });
 
@@ -40,7 +42,7 @@ export function shouldRevalidate({
   currentParams,
   nextParams,
   defaultShouldRevalidate,
-}: Route.ShouldRevalidateFunctionArgs) {
+}: ShouldRevalidateFunctionArgs) {
   if (currentParams.lang !== nextParams.lang) return true;
   if (currentParams.stage !== nextParams.stage) return false;
   return defaultShouldRevalidate;
@@ -110,7 +112,7 @@ function ExploreView({
       <ExploreTopBar />
 
       <div className="explore-stage-area">
-        {/* The 3D canvas goes here */}
+        <ExploreViewport stages={stages} />
         <ExplorePanel stage={stages[index]} stageCount={stages.length} />
       </div>
 
