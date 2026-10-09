@@ -26,5 +26,5 @@ const NO_DATA = 2 ** 23;
 export function decodeElevation(r, g, b) {
     const v = r * 65536 + g * 256 + b;
     if (v === NO_DATA) return null;
-    return (v < NO_DATA ? v : v - 2 ** 24) * 0.1;
+    return (v < NO_DATA ? v : v - 2 ** 24) * 0.01;
 }
