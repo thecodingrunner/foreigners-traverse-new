@@ -27,7 +27,7 @@ const PREVIEW_FILE = "../data/explore-preview.png";
 
 const ZOOM = 8; // GSI tile zoom: ~550 m per pixel around Japan
 const WIDTH = 2048; // output width in pixels (height follows the shape)
-const MARGIN_DEG = 1.2; // land shown around the route
+const MARGIN_DEG = 2; // land shown around the route
 const CONCURRENCY = 4; // polite to GSI's servers
 const ELEV_OFFSET_M = 100; // lets slightly-below-sea-level land be stored
 const ELEV_STEP_M = 0.1; // 16-bit steps: 0.1 m precision up to ~6,400 m
