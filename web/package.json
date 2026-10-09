@@ -14,11 +14,14 @@
     "routes": "npm run routes:preview && npm run routes:geojson",
     "explore:terrain": "node scripts/build-terrain.mjs",
     "explore:route": "node scripts/build-route3d.mjs",
-    "explore:assets": "npm run explore:terrain && npm run explore:route"    
+    "explore:assets": "npm run explore:terrain && npm run explore:route"
   },
   "dependencies": {
     "@react-router/node": "^8.4.0",
     "@react-router/serve": "^8.4.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "fast-png": "^8.0.0",
     "framer-motion": "^13.4.4",
     "github-slugger": "^2.0.0",
     "graphql": "^16.14.2",
@@ -32,6 +35,7 @@
     "react-router": "^8.4.0",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
+    "three": "^0.186.1",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
@@ -47,6 +51,7 @@
     "@types/node": "^22",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "@types/three": "^0.186.0",
     "@xmldom/xmldom": "^0.9.12",
     "dotenv": "^18.0.3",
     "pngjs": "^7.0.0",
