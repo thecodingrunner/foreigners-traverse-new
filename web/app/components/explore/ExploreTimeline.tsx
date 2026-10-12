@@ -127,7 +127,7 @@ export default function ExploreTimeline({
   };
 
   return (
-    <section className="explore-timeline" aria-label={t.explore.timelineLabel}>
+    <section className="explore-timeline" aria-label={t.explore.timelineLabel} data-scene-cover>
       <div className="explore-timeline-status">
         {/* Play button and speed controls to go here */}
         <button
