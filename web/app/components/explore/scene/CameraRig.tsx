@@ -3,13 +3,14 @@
 // during a mode change it blends from where it was to that goal.
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { MathUtils, type PerspectiveCamera } from "three";
+import { MathUtils, type PerspectiveCamera, Vector3 } from "three";
 import type { ExploreStage } from "~/data/stages.server";
 import { useMediaQuery } from "~/hooks/useMediaQuery";
 import { useExplore, useExploreApi } from "~/stores/explore-context";
 import type { RouteData } from "./assets";
 import {
   CAMERA,
+  CAMERA_LAG_S,
   EXAGGERATION,
   ORBIT_DEG_PER_PX,
   ORBIT_ZOOM_PER_WHEEL,
@@ -22,6 +23,8 @@ import {
   distanceToFit,
   easeOut,
   mixPose,
+  angleBetween,
+  smoothing,
 } from "./framing";
 import { pointAt, stageAt } from "./routeMath";
 import type { Insets } from "./useSceneInsets";
@@ -29,6 +32,9 @@ import type { Insets } from "./useSceneInsets";
 type Props = { route: RouteData; stages: ExploreStage[]; insets: Insets };
 
 const rad = MathUtils.degToRad;
+
+/** Follow mode never turns or zooms: a fixed "input" for the smoothing below */
+const FOLLOW_INPUT = { yaw: 0, spanKm: CAMERA.follow.spanKm };
 
 export default function CameraRig({ route, stages, insets }: Props) {
   const camera = useThree((state) => state.camera) as PerspectiveCamera;
@@ -76,10 +82,22 @@ export default function CameraRig({ route, stages, insets }: Props) {
   const hasPose = useRef(false);
   const orbit = useRef({ yaw: 0, spanKm: CAMERA.orbit.spanKm as number });
 
+  // Smoothed versions of the rider position and the orbit input: the camera
+  // chases these, so it eases after them instead of copying every jolt
+  const rider = useRef(new Vector3()).current;
+  const smooth = useRef({
+    target: new Vector3(),
+    yaw: 0,
+    spanKm: CAMERA.orbit.spanKm as number,
+    ready: false,
+    settled: true,
+  });
+
   // ---- Mode changes: start a transition from wherever the camera is now
   useEffect(() => {
     if (mode === "orbit")
       orbit.current = { yaw: 0, spanKm: CAMERA.orbit.spanKm };
+    smooth.current.ready = false;
     if (hasPose.current && !reducedMotion) {
       copyPose(pose, from);
       transitionStart.current = performance.now();
@@ -133,50 +151,84 @@ export default function CameraRig({ route, stages, insets }: Props) {
     };
   }, [mode, invalidate, gl]);
 
-    // ---- Every frame: goal for this mode → (blend) → camera.
+  // ---- Every frame: goal for this mode → (blend) → camera.
   // Priority -1 runs this before the other useFrame callbacks (fog, dashes),
   // so they all see this frame's camera, not last frame's.
-  useFrame(({ size }) => {
+  useFrame(({ size }, delta) => {
     const freeWidth = size.width - insets.left - insets.right;
     const freeHeight = size.height - insets.top - insets.bottom;
 
     if (mode === "overview") {
-        const pitch = rad(CAMERA.overview.pitchDeg);
-              // Fit the route's width into the free width, and its depth (foreshortened
+      const pitch = rad(CAMERA.overview.pitchDeg);
+      // Fit the route's width into the free width, and its depth (foreshortened
       // by the tilt) into the free height: whichever needs more distance wins
       const distance = Math.max(
         distanceToFit(camera, box.maxX - box.minX, freeWidth, size.height),
-        distanceToFit(camera, (box.maxZ - box.minZ) * Math.cos(pitch), freeHeight, size.height),
+        distanceToFit(
+          camera,
+          (box.maxZ - box.minZ) * Math.cos(pitch),
+          freeHeight,
+          size.height,
+        ),
       );
       goal.target.set((box.minX + box.maxX) / 2, 0, (box.minZ + box.maxZ) / 2);
       goal.distance = distance * CAMERA.overview.margin;
       goal.pitch = pitch;
       goal.yaw = 0;
     } else {
-        // Follow and orbit both centre on the rider
-        const { position, count } = api.getState();
-        const { index, fraction } = stageAt(position, count);
-        const stage = routeStages[index];
-        if (stage) {
-            const p = pointAt(stage, fraction);
-            goal.target.set(p.x, p.y * EXAGGERATION, p.z);
-        }
+      // Follow and orbit both centre on the rider
+      const { position, count } = api.getState();
+      const { index, fraction } = stageAt(position, count);
+      const stage = routeStages[index];
+      if (stage) {
+        const p = pointAt(stage, fraction);
+        rider.set(p.x, p.y * EXAGGERATION, p.z);
+      }
 
-        const settings = mode === "follow" ? CAMERA.follow : CAMERA.orbit;
-        const spanKm = mode === "follow" ? CAMERA.follow.spanKm : orbit.current.spanKm;
-        goal.distance = distanceToFit(camera, spanKm, freeWidth, size.height);
-        goal.pitch = rad(settings.pitchDeg);
-        goal.yaw = mode === "orbit" ? orbit.current.yaw : 0;
+      const s = smooth.current;
+      const input = mode === "orbit" ? orbit.current : FOLLOW_INPUT;
+      if (!s.ready || reducedMotion) {
+        s.target.copy(rider);
+        s.yaw = input.yaw;
+        s.spanKm = input.spanKm;
+        s.ready = true;
+      } else {
+        // With on-demand rendering, the first frame after an idle spell reports
+        // the whole idle time as its delta, which would snap straight to the
+        // goal. Treat that first frame as an ordinary 60fps one instead.
+        const dt = s.settled ? 1 / 60 : delta;
+        s.target.lerp(rider, smoothing(CAMERA_LAG_S.follow, dt));
+        const k = smoothing(CAMERA_LAG_S.input, dt);
+        s.yaw += angleBetween(s.yaw, input.yaw) * k;
+        s.spanKm *= (input.spanKm / s.spanKm) ** k; // ease zoom by ratio, like mixPose
+      }
+
+      // Still catching up? On-demand rendering won't draw again by itself
+      const settled =
+        s.target.distanceToSquared(rider) < 1e-4 &&
+        Math.abs(angleBetween(s.yaw, input.yaw)) < 1e-4 &&
+        Math.abs(s.spanKm - input.spanKm) < 1e-4;
+      s.settled = settled;
+      if (!settled) invalidate();
+
+      const settings = mode === "follow" ? CAMERA.follow : CAMERA.orbit;
+      goal.target.copy(s.target);
+      goal.distance = distanceToFit(camera, s.spanKm, freeWidth, size.height);
+      goal.pitch = rad(settings.pitchDeg);
+      goal.yaw = s.yaw;
     }
 
     // Blend from the transition's start towards the (possibly moving) goal
     if (transitionStart.current !== null) {
-        const k = Math.min(1, (performance.now() - transitionStart.current) / CAMERA.transitionMs);
-        mixPose(from, goal, easeOut(k), pose);
-        if (k < 1) invalidate();
-        else transitionStart.current = null;
+      const k = Math.min(
+        1,
+        (performance.now() - transitionStart.current) / CAMERA.transitionMs,
+      );
+      mixPose(from, goal, easeOut(k), pose);
+      if (k < 1) invalidate();
+      else transitionStart.current = null;
     } else {
-        copyPose(goal, pose);
+      copyPose(goal, pose);
     }
 
     applyPose(camera, pose);

@@ -53,7 +53,7 @@ export const UNRIDDEN_DASH_PX = [2, 7] as const;
  * of the screen not covered by the panel and bars) at the point we look at.
  */
 export const CAMERA = {
-    overview: { pitchDeg: 22, margin: 1.1 },
+    overview: { pitchDeg: 22, margin: 1.4 },
     follow: { pitchDeg: 48, spanKm: 260 },
     orbit: { pitchDeg: 42, spanKm: 260, minSpanKm: 40, maxSpanKm: 1500 },
     transitionMs: 1100,
@@ -62,3 +62,11 @@ export const CAMERA = {
 /** Orbit: degrees of turn per pixel dragged, and zoom per wheel "click". */
 export const ORBIT_DEG_PER_PX = 0.3;
 export const ORBIT_ZOOM_PER_WHEEL = 0.0015;
+
+/**
+ * How lazily the camera catches up, in seconds (roughly the time to close
+ * two-thirds of a gap). Higher = smoother and floatier, 0 = locked on.
+ * `follow` smooths the point we look at, so the camera glides along the
+ * road instead of copying every bend; `input` smooths orbit drags and zoom.
+ */
+export const CAMERA_LAG_S = { follow: 0.6, input: 0.15 } as const;

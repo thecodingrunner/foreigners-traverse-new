@@ -63,7 +63,7 @@ export function applyPose(camera: PerspectiveCamera, pose: Pose) {
 }
 
 /** Shortest signed angle from a to b, so a turn never goes the long way round. */
-function angleBetween(a: number, b: number) {
+export function angleBetween(a: number, b: number) {
     return Math.atan2(Math.sin(b - a), Math.cos(b - a));
 }
 
@@ -91,3 +91,13 @@ export function copyPose(from: Pose, to: Pose) {
 
 /** Ease-out cubic: starts quickly, settles gently. */
 export const easeOut = (k: number) => 1 - (1 - k) ** 3;
+
+/**
+ * Frame-rate independent smoothing: how much of the remaining gap to close
+ * this frame so that, whatever the frame rate, about 63% of any gap is
+ * closed every `lagSeconds`. lerp(current, target, smoothing(...)) each frame
+ * gives a gentle "catch up" instead of a rigid lock.
+ */
+export function smoothing(lagSeconds: number, deltaSeconds: number) {
+  return lagSeconds <= 0 ? 1 : 1 - Math.exp(-deltaSeconds / lagSeconds);
+}
