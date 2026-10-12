@@ -8,11 +8,13 @@ import type { ExploreAssets } from "./assets";
 import { readSceneColors } from "./colors";
 import { EXAGGERATION } from "./constants";
 import Markers from "./Markers";
-import OverviewCamera from "./OverviewCamera";
 import RouteLines from "./RouteLines";
 import Terrain from "./Terrain";
-import { OrbitControls } from "@react-three/drei";
 import SceneFog from "./SceneFog";
+import { useT } from "~/lib/dictionary";
+import { useExplore } from "~/stores/explore-context";
+import CameraRig from "./CameraRig";
+import { useSceneInsets } from "./useSceneInsets";
 
 type Props = {
   assets: ExploreAssets;
@@ -24,15 +26,19 @@ export default function ExploreScene({ assets, stages, onContextLost }: Props) {
   const isMobile = useMediaQuery("(max-width: 767px)");
   const colors = useMemo(readSceneColors, []);
   const labels = useRef<HTMLDivElement>(null);
+  const container = useRef<HTMLDivElement>(null);
+  const insets = useSceneInsets(container);
+  const mode = useExplore((s) => s.mode);
+  const t = useT();
 
   return (
-    <div className="explore-scene">
+    <div ref={container} className="explore-scene">
       <Canvas
         className="explore-canvas"
         frameloop="demand"
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ antialias: true, alpha: true, stencil: true }}
-        camera={{ fov: 35, near: 5, far: 20000 }}
+        camera={{ fov: 35, near: 5, far: 20000, manual: true }}
         onCreated={({ gl }) => {
           gl.domElement.addEventListener("webglcontextlost", (event) => {
             event.preventDefault();
@@ -40,11 +46,10 @@ export default function ExploreScene({ assets, stages, onContextLost }: Props) {
           });
         }}
       >
-        <OverviewCamera route={assets.route} />
+
+        <CameraRig route={assets.route} stages={stages} insets={insets} />
 
         <SceneFog color={colors.skyHorizon} />
-
-        <OrbitControls />
 
         {/* Stretch the terrain and everything on it vertically, together */}
         <group scale={[1, EXAGGERATION, 1]}>
@@ -66,6 +71,8 @@ export default function ExploreScene({ assets, stages, onContextLost }: Props) {
 
       {/* A fixed home for the HTML labels, on top of the canvas */}
       <div ref={labels} className="scene-labels" />
+
+      {mode === "orbit" && <p className="scene-orbit-hint">{t.explore.orbitHint}</p>}
     </div>
   );
 }

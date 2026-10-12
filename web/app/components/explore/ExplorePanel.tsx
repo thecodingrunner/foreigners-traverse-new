@@ -57,7 +57,7 @@ export default function ExplorePanel({ stage, stageCount }: ExplorePanelProps) {
   ].filter((item): item is StatItem => item !== null);
 
   return (
-    <aside className="explore-panel" aria-label={t.explore.panelLabel}>
+    <aside className="explore-panel" aria-label={t.explore.panelLabel} data-scene-cover>
       <p className="text-label">
         <span className="text-accent">
           {t.explore.day(stage.stageNumber ?? 0)}
