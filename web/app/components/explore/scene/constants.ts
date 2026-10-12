@@ -3,9 +3,6 @@ import { MathUtils, Vector3 } from "three";
 /** Vertical exaggeration: real relief looks flat at the scale of a whole country */
 export const EXAGGERATION = 10;
 
-/** Camera tilt away from straight down, from the design spec. */
-export const OVERVIEW_PITCH_DEG = 22;
-
 // ---------------------------------------------------------------- terrain look
 
 /** Sun: azimuth 315° (north-west), 35° above the horizon. */
@@ -47,3 +44,21 @@ export const LINE_WIDTH = { ridden: 3, halo: 10, unridden: 2 } as const;
 
 /** Unridden dash pattern in px: 2 on, 7 off. */
 export const UNRIDDEN_DASH_PX = [2, 7] as const;
+
+// ---------------------------------------------------------------- camera
+
+/**
+ * Camera modes from the design spec. Pitch is the tilt away from straight
+ * down. Span is how many km of ground fit across the visible area (the part
+ * of the screen not covered by the panel and bars) at the point we look at.
+ */
+export const CAMERA = {
+    overview: { pitchDeg: 22, margin: 1.1 },
+    follow: { pitchDeg: 48, spanKm: 260 },
+    orbit: { pitchDeg: 42, spanKm: 260, minSpanKm: 40, maxSpanKm: 1500 },
+    transitionMs: 1100,
+} as const;
+
+/** Orbit: degrees of turn per pixel dragged, and zoom per wheel "click". */
+export const ORBIT_DEG_PER_PX = 0.3;
+export const ORBIT_ZOOM_PER_WHEEL = 0.0015;
