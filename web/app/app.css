@@ -1176,6 +1176,7 @@ html {
     background: var(--gofun);
     color: var(--nibi);
     box-shadow: var(--shadow-overlay);
+    z-index: 3; /* was 1: must sit above the scene labels */
 
     @media (min-width: 1024px) {
       inset: 24px 28px auto auto;
@@ -1253,6 +1254,59 @@ html {
     }
   }
 
+  /* ---- Whole-ride elevation profile (timeline) */
+  .elevation-profile {
+    position: relative;
+    height: 64px;
+    --progress: 0;
+    --rider-height: 0;
+  }
+  .elevation-profile svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  /* The ridden copy is cropped at the playhead: inset(top right bottom left) */
+  .elevation-profile-ahead,
+  .elevation-profile-ridden {
+    position: absolute;
+    inset: 0;
+  }
+  .elevation-profile-ridden {
+    clip-path: inset(0 calc((1 - var(--progress)) * 100%) 0 0);
+  }
+  .elevation-profile-area {
+    fill: rgb(252 251 246 / 0.07);
+  }
+  .elevation-profile-line {
+    fill: none;
+    stroke: rgb(252 251 246 / 0.35);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke; /* 1.5px on screen, however the SVG is stretched */
+    stroke-linejoin: round;
+  }
+  .elevation-profile-ridden .elevation-profile-area {
+    fill: color-mix(in srgb, var(--akane) 35%, transparent);
+  }
+  .elevation-profile-ridden .elevation-profile-line {
+    stroke: var(--route-ridden);
+  }
+
+  .elevation-profile-dot {
+    position: absolute;
+    left: calc(var(--progress) * 100%);
+    bottom: calc(var(--rider-height) * 100%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gofun);
+    box-shadow: 0 0 0 2.5px var(--akane);
+    translate: -50% 50%;
+    pointer-events: none;
+  }
+
   .explore-timeline-status {
     display: flex;
     flex-wrap: wrap;
@@ -1316,16 +1370,18 @@ html {
 
   .explore-track {
     --progress: 0;
+    --bar-band: 28px; /* the strip under the profile that holds the bar */
     position: relative;
-    height: 28px;
+    padding-bottom: var(--bar-band); /* the profile sits above, in normal flow */
     cursor: pointer;
     touch-action: none;
 
-    /* Unridden base bar */
+    /* Unridden base bar: 4px, centred in the bottom band */
     &::before {
       content: "";
       position: absolute;
-      inset: 12px 0;
+      inset: auto 0 12px 0;
+      height: 4px;
       background: rgb(252 251 246 / 0.18);
     }
 
@@ -1337,17 +1393,20 @@ html {
 
   .explore-track-fill {
     position: absolute;
-    inset: 12px auto 12px 0;
+    left: 0;
+    bottom: 12px;
+    height: 4px;
     width: calc(var(--progress) * 100%);
     background: var(--akane);
   }
 
   .explore-track-segments {
     position: absolute;
-    inset: 12px 0;
+    inset: auto 0 12px 0;
+    height: 4px;
     display: flex;
 
-    span {
+    > * {
       flex-basis: 0;
       min-width: 0;
       box-shadow: inset -2px 0 0 var(--nibi-deep); /* divider between stages */
@@ -1360,11 +1419,11 @@ html {
 
   .explore-track-handle {
     position: absolute;
-    top: 50%;
+    bottom: calc(var(--bar-band) / 2); /* the middle of the bar band */
     left: calc(var(--progress) * 100%);
     width: 16px;
     height: 16px;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 50%);
     border-radius: 50%;
     background: var(--gofun);
     border: 3px solid var(--akane);
@@ -1398,10 +1457,6 @@ html {
   .scene-labels {
     overflow: hidden;
     pointer-events: none; /* let drags reach the canvas */
-  }
-
-  .explore-panel {
-    z-index: 3; /* was 1: must sit above the scene labels */
   }
 
   /* Loading */
@@ -1497,16 +1552,6 @@ html {
     outline: 1.5px solid var(--gofun);
   }
 
-  .scene-city {
-    margin-left: 8px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    color: var(--gofun);
-  }
-
   /* ---- The rider, with a ring that pulses outwards */
   .scene-rider {
     position: relative;
@@ -1566,59 +1611,65 @@ html {
     letter-spacing: 0.04em;
   }
 
-
   /* ---- Camera mode switch (top bar) */
-.camera-modes {
-  display: flex;
-  gap: 2px;
-  padding: 3px;
-  border-radius: 999px;
-  background: rgb(38 36 39 / 0.8);
-  border: 1px solid rgb(252 251 246 / 0.18);
-}
-.camera-mode {
-  min-height: 36px;
-  padding: 0 16px;
-  border: 0;
-  border-radius: 999px;
-  background: none;
-  color: rgb(252 251 246 / 0.75);
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-.camera-mode:hover { color: var(--gofun); }
-.camera-mode[aria-checked="true"] {
-  background: var(--gofun);
-  color: var(--nibi);
-}
-.camera-mode:focus-visible {
-  outline: 2px solid var(--akane);
-  outline-offset: 2px;
-}
-:lang(ja) .camera-mode {
-  font-family: var(--font-ja, "M PLUS 1", sans-serif);
-  font-size: 12px;
-  letter-spacing: 0;
-  text-transform: none;
-}
+  .camera-modes {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgb(38 36 39 / 0.8);
+    border: 1px solid rgb(252 251 246 / 0.18);
+  }
+  .camera-mode {
+    min-height: 36px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: rgb(252 251 246 / 0.75);
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .camera-mode:hover {
+    color: var(--gofun);
+  }
+  .camera-mode[aria-checked="true"] {
+    background: var(--gofun);
+    color: var(--nibi);
+  }
+  .camera-mode:focus-visible {
+    outline: 2px solid var(--akane);
+    outline-offset: 2px;
+  }
+  :lang(ja) .camera-mode {
+    font-family: var(--font-ja, "M PLUS 1", sans-serif);
+    font-size: 12px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
 
-/* ---- Orbit mode: grab cursor, and stop touch drags scrolling the page */
-.explore-canvas canvas.is-orbit { cursor: grab; touch-action: none; }
-.explore-canvas canvas.is-dragging { cursor: grabbing; }
+  /* ---- Orbit mode: grab cursor, and stop touch drags scrolling the page */
+  .explore-canvas canvas.is-orbit {
+    cursor: grab;
+    touch-action: none;
+  }
+  .explore-canvas canvas.is-dragging {
+    cursor: grabbing;
+  }
 
-/* ---- "Drag to orbit" hint, kept clear of the UI using the measured insets */
-.scene-orbit-hint {
-  position: absolute;
-  left: calc(var(--scene-inset-left, 0px) + 28px);
-  bottom: calc(var(--scene-inset-bottom, 0px) + 20px);
-  margin: 0;
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: rgb(252 251 246 / 0.7);
-  pointer-events: none;
-}
+  /* ---- "Drag to orbit" hint, kept clear of the UI using the measured insets */
+  .scene-orbit-hint {
+    position: absolute;
+    left: calc(var(--scene-inset-left, 0px) + 28px);
+    bottom: calc(var(--scene-inset-bottom, 0px) + 20px);
+    margin: 0;
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: rgb(252 251 246 / 0.7);
+    pointer-events: none;
+  }
 }
