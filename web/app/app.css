@@ -1565,4 +1565,60 @@ html {
     font-family: var(--font-sans, "M PLUS 1", sans-serif);
     letter-spacing: 0.04em;
   }
+
+
+  /* ---- Camera mode switch (top bar) */
+.camera-modes {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgb(38 36 39 / 0.8);
+  border: 1px solid rgb(252 251 246 / 0.18);
+}
+.camera-mode {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: rgb(252 251 246 / 0.75);
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.camera-mode:hover { color: var(--gofun); }
+.camera-mode[aria-checked="true"] {
+  background: var(--gofun);
+  color: var(--nibi);
+}
+.camera-mode:focus-visible {
+  outline: 2px solid var(--akane);
+  outline-offset: 2px;
+}
+:lang(ja) .camera-mode {
+  font-family: var(--font-ja, "M PLUS 1", sans-serif);
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ---- Orbit mode: grab cursor, and stop touch drags scrolling the page */
+.explore-canvas canvas.is-orbit { cursor: grab; touch-action: none; }
+.explore-canvas canvas.is-dragging { cursor: grabbing; }
+
+/* ---- "Drag to orbit" hint, kept clear of the UI using the measured insets */
+.scene-orbit-hint {
+  position: absolute;
+  left: calc(var(--scene-inset-left, 0px) + 28px);
+  bottom: calc(var(--scene-inset-bottom, 0px) + 20px);
+  margin: 0;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgb(252 251 246 / 0.7);
+  pointer-events: none;
+}
 }

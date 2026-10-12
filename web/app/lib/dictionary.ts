@@ -119,6 +119,10 @@ const dictionary = {
       errorBody:
         "Something went wrong loading the terrain. Try again, or use the 2D map.",
       retry: "Try again",
+      camOverview: "Overview",
+      camFollow: "Follow",
+      camOrbit: "Orbit",
+      orbitHint: "Drag to orbit · scroll to zoom",
     },
   },
   ja: {
@@ -230,6 +234,10 @@ const dictionary = {
       errorBody:
         "地形の読み込み中に問題が発生しました。もう一度試すか、2D地図をご利用ください。",
       retry: "再試行",
+      camOverview: "全体",
+      camFollow: "追従",
+      camOrbit: "周回",
+      orbitHint: "ドラッグで回転 · スクロールでズーム",
     },
   },
 } satisfies Record<Locale, unknown>;

@@ -4,6 +4,7 @@ import { useT } from "~/lib/dictionary";
 import { localePath, useLocale } from "~/lib/i18n";
 import { LANGUAGES } from "~/lib/navigation";
 import { useExplore } from "~/stores/explore-context";
+import CameraModeControl from "./CameraModeControl";
 
 const MODES = ["overview", "follow", "orbit"] as const;
 
@@ -16,7 +17,7 @@ export default function ExploreTopBar() {
   const setMode = useExplore((s) => s.setMode);
 
   return (
-    <header className="explore-topbar">
+    <header className="explore-topbar" data-scene-cover>
       <div className="flex items-center gap-5">
         <Link to={localePath("/journal", locale)} className="text-ui">
           ← {t.explore.back}
@@ -27,17 +28,7 @@ export default function ExploreTopBar() {
         </span>
       </div>
 
-      <div
-        className="explore-modes"
-        role="group"
-        aria-label={t.explore.cameraLabel}
-      >
-        {MODES.map((m) => (
-          <button key={m} type="button" aria-pressed={m === mode} onClick={() => setMode(m)}>
-            {t.explore.modes[m]}
-          </button>
-        ))}
-      </div>
+      <CameraModeControl />
 
       <div className="language-switch">
         {LANGUAGES.map(({ code, short }) => (
