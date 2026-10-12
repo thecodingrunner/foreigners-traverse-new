@@ -20,8 +20,9 @@ import { routeLabel } from "~/lib/places";
 import type { Region } from "~/lib/regions";
 import { SPEEDS } from "~/stores/explore";
 import { useExplore, useExploreApi } from "~/stores/explore-context";
+import ElevationProfile from "./ElevationProfile";
 
-type ExploreTimelineProps = { stages: ExploreStage[]; current: number | null };
+type ExploreTimelineProps = { stages: ExploreStage[]; };
 
 function regionGroups(stages: ExploreStage[]) {
   const groups: { region: Region | null; km: number }[] = [];
@@ -36,7 +37,6 @@ function regionGroups(stages: ExploreStage[]) {
 
 export default function ExploreTimeline({
   stages,
-  current,
 }: ExploreTimelineProps) {
   const locale = useLocale();
   const t = useT();
@@ -185,6 +185,7 @@ export default function ExploreTimeline({
             onPointerCancel={() => (drag.current = null)}
             onKeyDown={onKeyDown}
         >
+          <ElevationProfile stages={stages} distances={distances} />
           <div className="explore-track-fill" aria-hidden="true" />
           <div className="explore-track-segments" aria-hidden="true">
             {distances.kms.map((km, i) => (

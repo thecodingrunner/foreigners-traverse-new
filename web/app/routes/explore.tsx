@@ -118,7 +118,6 @@ function ExploreView({
 
       <ExploreTimeline
         stages={stages}
-        current={stages[index].stageNumber ?? null}
       />
     </div>
   );
