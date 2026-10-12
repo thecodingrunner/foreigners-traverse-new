@@ -1,4 +1,5 @@
 import { type Camera, MathUtils, type PerspectiveCamera, Vector3 } from "three";
+import { pixelsPerKmAt } from "./framing";
 
 const forward = new Vector3();
 
@@ -12,11 +13,7 @@ export function viewDistance(camera: Camera) {
     return forward.y < -0.01 ? camera.position.y / -forward.y : camera.position.length();
 }
 
-/**
- * Screen pixels per km at the centre of the screen. The visible height at
- * distance d is 2·d·tan(fov / 2), and that height fills the viewport.
- */
+/** Screen pixels per km at the centre of the view. */
 export function pixelsPerKm(camera: Camera, viewportHeight: number) {
-    const { fov } = camera as PerspectiveCamera;
-    return viewportHeight / (2 * viewDistance(camera) * MathUtils.degToRad(fov / 2));
+  return pixelsPerKmAt(camera as PerspectiveCamera, viewDistance(camera), viewportHeight);
 }
