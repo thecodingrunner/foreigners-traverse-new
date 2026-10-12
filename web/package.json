@@ -14,7 +14,8 @@
     "routes": "npm run routes:preview && npm run routes:geojson",
     "explore:terrain": "node scripts/build-terrain.mjs",
     "explore:route": "node scripts/build-route3d.mjs",
-    "explore:assets": "npm run explore:terrain && npm run explore:route"
+    "explore:profile": "node scripts/build-profile.mjs",
+    "explore:assets": "npm run explore:terrain && npm run explore:route && npm run explore:profile"
   },
   "dependencies": {
     "@react-router/node": "^8.4.0",
