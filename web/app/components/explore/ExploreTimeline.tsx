@@ -7,7 +7,7 @@ import { buildDistances, indexAt } from "~/lib/explore";
 import type { Region } from "~/lib/regions";
 import { useExplore } from "~/stores/explore-context";
 import ElevationProfile from "./ElevationProfile";
-import { PlayButton, SpeedControl } from "./PlaybackControls";
+import { PlaybackButtons, SpeedControl } from "./PlaybackControls";
 
 type ExploreTimelineProps = { stages: ExploreStage[] };
 
@@ -34,7 +34,7 @@ export default function ExploreTimeline({ stages }: ExploreTimelineProps) {
   return (
     <section className="explore-timeline" aria-label={t.explore.timelineLabel} data-scene-cover>
       <div className="explore-timeline-status">
-        <PlayButton />
+        <PlaybackButtons />
         <p className="text-label">
           {t.explore.day(dayNumber)} <span className="opacity-60">/ {stages.length}</span>
         </p>

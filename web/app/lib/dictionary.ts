@@ -127,6 +127,12 @@ const dictionary = {
       sheetShow: "Show stage details",
       sheetHide: "Hide stage details",
       sheetHint: "Drag up for the entry",
+      previousDay: "Previous day",
+      nextDay: "Next day",
+      reducedNote:
+        "Reduced motion is on. The camera cuts between stages instead of flying, and nothing plays automatically.",
+      sceneLabel: "3D map of the ride from Fukuoka to Aomori",
+      announce: (day: string, route: string) => `${day}: ${route}`,
     },
   },
   ja: {
@@ -246,6 +252,12 @@ const dictionary = {
       sheetShow: "ステージの詳細を表示",
       sheetHide: "ステージの詳細を閉じる",
       sheetHint: "上にスワイプして記事を表示",
+      previousDay: "前のステージ",
+      nextDay: "次のステージ",
+      reducedNote:
+        "「視差効果を減らす」が有効です。カメラは飛行せずにステージ間を切り替え、自動再生もしません。",
+      sceneLabel: "福岡から青森までのルートの3D地図",
+      announce: (day: string, route: string) => `${day}：${route}`,
     },
   },
 } satisfies Record<Locale, unknown>;

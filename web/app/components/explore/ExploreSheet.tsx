@@ -14,7 +14,7 @@ import { useTrackScrubber } from "~/hooks/useTrackScrubber";
 import { useT } from "~/lib/dictionary";
 import { buildDistances } from "~/lib/explore";
 import ElevationProfile from "./ElevationProfile";
-import { PlayButton, SpeedControl } from "./PlaybackControls";
+import { PlaybackButtons, SpeedControl } from "./PlaybackControls";
 import { useStageDetails } from "./useStageDetails";
 
 type Props = { stages: ExploreStage[]; stage: ExploreStage };
@@ -139,7 +139,7 @@ export default function ExploreSheet({ stages, stage }: Props) {
       <div className="explore-sheet-body">
         {/* Play + week scrubber */}
         <div className="explore-sheet-controls">
-          <PlayButton />
+          <PlaybackButtons />
           <div className="explore-sheet-scrubber">
             <div
               className="sheet-track"

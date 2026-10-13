@@ -1956,4 +1956,79 @@ html {
       stroke: var(--akane);
     }
   }
+
+    /* ================================================================
+     Reduced motion
+     ================================================================ */
+  .reduced-motion-note {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 3;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    max-width: 520px;
+    margin: 0;
+    padding: 10px 14px;
+    background: rgb(38 36 39 / 0.85);
+    border: 1px solid rgb(252 251 246 / 0.2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgb(252 251 246 / 0.88);
+
+    span {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--akane-light);
+    }
+
+    @media (min-width: 1024px) {
+      top: 24px;
+      left: 24px;
+      right: auto;
+    }
+  }
+
+  .explore-playback.is-reduced {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .explore-steps {
+    display: flex;
+    gap: 6px;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgb(252 251 246 / 0.3);
+      color: var(--gofun);
+      font-size: 18px;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      &:focus-visible {
+        outline: 2px solid var(--gofun);
+        outline-offset: 2px;
+      }
+    }
+
+    /* Light version inside the mobile sheet */
+    .explore-sheet & button {
+      border-color: var(--border-control);
+      color: var(--nibi);
+
+      &:focus-visible {
+        outline-color: var(--akane);
+      }
+    }
+  }
 }
