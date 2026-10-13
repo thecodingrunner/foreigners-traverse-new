@@ -54,11 +54,12 @@ export function useSceneInsets(container: RefObject<HTMLElement | null>) {
         }
       }
 
-      // Always leave at least half the scene to look at
-      next.left = Math.min(next.left, box.width / 4);
-      next.right = Math.min(next.right, box.width / 2 - next.left);
-      next.top = Math.min(next.top, box.height / 4);
-      next.bottom = Math.min(next.bottom, box.height / 2 - next.top);
+      // Always leave some of the scene to look at (an open bottom sheet can
+      // cover most of a phone screen, and the camera should frame what's left)
+      const minWidth = Math.min(160, box.width * 0.25);
+      const minHeight = Math.min(120, box.height * 0.2);
+      next.right = Math.min(next.right, box.width - next.left - minWidth);
+      next.bottom = Math.min(next.bottom, box.height - next.top - minHeight);
 
       for (const side of ["top", "right", "bottom", "left"] as const) {
         scene.style.setProperty(
@@ -77,11 +78,13 @@ export function useSceneInsets(container: RefObject<HTMLElement | null>) {
     };
 
     measure();
-        // Re-measure when the scene or any covering element changes size
+    // Re-measure when the scene or any covering element changes size
     // (window resize, panel content changing, sheet expanding…)
     const observer = new ResizeObserver(measure);
     observer.observe(scene);
-    document.querySelectorAll("[data-scene-cover]").forEach((el) => observer.observe(el));
+    document
+      .querySelectorAll("[data-scene-cover]")
+      .forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [container]);
 
