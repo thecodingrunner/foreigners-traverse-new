@@ -61,6 +61,10 @@ for (const { file, stageNumber, coords } of stages) {
     SMOOTH_POINTS,
   );
   const km = along.at(-1);
+  if (!(km > 0)) {
+    console.warn(`⚠ ${file}: track has no length, skipped`);
+    continue;
+  }
 
   // Resample every STEP_KM, plus the exact finish
   const cursor = { i: 0 }; // samples go forwards, so the search can too

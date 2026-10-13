@@ -86,6 +86,7 @@ export function profilePaths(
         const x = Math.round(toFraction(i + fraction, distances) * PROFILE_W * 10) / 10;
         const y = Math.round((1 - heightShare(metres, profile.maxM)) * PROFILE_H * 10) / 10;
         if (run.length === 0) runStartX = x;
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return flush();
         run.push(`${x},${y}`);
         lastX = x;
     });
