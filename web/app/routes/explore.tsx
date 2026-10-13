@@ -20,6 +20,21 @@ import { useExploreUrlSync } from "~/hooks/useExploreUrlSync";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import ExploreViewport from "~/components/explore/ExploreViewport";
 import ExploreSheet from "~/components/explore/ExploreSheet";
+import ReducedMotionNote from "~/components/explore/ReducedMotionNote";
+import StageAnnouncer from "~/components/explore/StageAnnouncer";
+
+export const links: Route.LinksFunction = () =>
+  [
+    "/explore/terrain.png",
+    "/explore/terrain.json",
+    "/explore/route.json",
+    "/explore/profile.json",
+  ].map((href) => ({
+    rel: "preload",
+    href,
+    as: "fetch",
+    crossOrigin: "anonymous" as const,
+  }));
 
 const notFound = () => new Response("Not Found", { status: 404 });
 
@@ -116,11 +131,11 @@ function ExploreView({
         <ExploreViewport stages={stages} />
         <ExplorePanel stage={stages[index]} stageCount={stages.length} />
         <ExploreSheet stages={stages} stage={stages[index]} />
+        <ReducedMotionNote />
       </div>
 
-      <ExploreTimeline
-        stages={stages}
-      />
+      <ExploreTimeline stages={stages} />
+      <StageAnnouncer stages={stages} />
     </div>
   );
 }
