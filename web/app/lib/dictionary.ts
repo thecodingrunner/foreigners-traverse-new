@@ -123,6 +123,10 @@ const dictionary = {
       camFollow: "Follow",
       camOrbit: "Orbit",
       orbitHint: "Drag to orbit · scroll to zoom",
+      week: (n: number) => `W${n}`,
+      sheetShow: "Show stage details",
+      sheetHide: "Hide stage details",
+      sheetHint: "Drag up for the entry",
     },
   },
   ja: {
@@ -238,6 +242,10 @@ const dictionary = {
       camFollow: "追従",
       camOrbit: "周回",
       orbitHint: "ドラッグで回転 · スクロールでズーム",
+      week: (n: number) => `${n}週`,
+      sheetShow: "ステージの詳細を表示",
+      sheetHide: "ステージの詳細を閉じる",
+      sheetHint: "上にスワイプして記事を表示",
     },
   },
 } satisfies Record<Locale, unknown>;
