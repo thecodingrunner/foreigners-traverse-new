@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { MathUtils, type PerspectiveCamera, Vector3 } from "three";
 import type { ExploreStage } from "~/data/stages.server";
-import { useMediaQuery } from "~/hooks/useMediaQuery";
+import { useReducedMotion } from "~/hooks/useReducedMotion";
 import { useExplore, useExploreApi } from "~/stores/explore-context";
 import type { RouteData } from "./assets";
 import {
@@ -43,7 +43,7 @@ export default function CameraRig({ route, stages, insets }: Props) {
   const invalidate = useThree((state) => state.invalidate);
   const api = useExploreApi();
   const mode = useExplore((s) => s.mode);
-  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const reducedMotion = useReducedMotion();
 
   // ---- Lens shift: centre the view in the part of the screen the UI leaves free
   useLayoutEffect(() => {

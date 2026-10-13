@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useExplore, useExploreApi } from "~/stores/explore-context";
-import { useMediaQuery } from "~/hooks/useMediaQuery";
+import { useReducedMotion } from "~/hooks/useReducedMotion";
 
 const SLIDE_MS = 2500;
 
@@ -8,7 +8,7 @@ export function usePlayback() {
     const api = useExploreApi();
     const playing = useExplore((s) => s.playing);
     const speed = useExplore((s) => s.speed);
-    const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+    const reducedMotion = useReducedMotion();
 
     useEffect(() => {
         if (!playing) return;
