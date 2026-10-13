@@ -19,13 +19,14 @@ import { usePlayback } from "~/hooks/usePlayback";
 import { useExploreUrlSync } from "~/hooks/useExploreUrlSync";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import ExploreViewport from "~/components/explore/ExploreViewport";
+import ExploreSheet from "~/components/explore/ExploreSheet";
 
 const notFound = () => new Response("Not Found", { status: 404 });
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
   if (params.stage !== undefined && !/^\d+$/.test(params.stage))
-    return notFound();
+    throw notFound();
 
   const stages = await getExploreStages(locale);
   if (stages.length === 0) throw notFound();
@@ -114,6 +115,7 @@ function ExploreView({
       <div className="explore-stage-area">
         <ExploreViewport stages={stages} />
         <ExplorePanel stage={stages[index]} stageCount={stages.length} />
+        <ExploreSheet stages={stages} stage={stages[index]} />
       </div>
 
       <ExploreTimeline
