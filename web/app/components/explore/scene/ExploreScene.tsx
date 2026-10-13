@@ -15,6 +15,7 @@ import { useT } from "~/lib/dictionary";
 import { useExplore } from "~/stores/explore-context";
 import CameraRig from "./CameraRig";
 import { useSceneInsets } from "./useSceneInsets";
+import AdaptiveResolution from "./AdaptiveResolution";
 
 type Props = {
   assets: ExploreAssets;
@@ -32,7 +33,7 @@ export default function ExploreScene({ assets, stages, onContextLost }: Props) {
   const t = useT();
 
   return (
-    <div ref={container} className="explore-scene">
+    <div ref={container} className="explore-scene" role="img" aria-label={t.explore.sceneLabel}>
       <Canvas
         className="explore-canvas"
         frameloop="demand"
@@ -48,6 +49,8 @@ export default function ExploreScene({ assets, stages, onContextLost }: Props) {
       >
 
         <CameraRig route={assets.route} stages={stages} insets={insets} />
+
+        <AdaptiveResolution />
 
         <SceneFog color={colors.skyHorizon} />
 
