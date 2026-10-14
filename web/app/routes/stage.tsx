@@ -17,6 +17,7 @@ import { Link } from "react-router";
 import { useT } from "~/lib/dictionary";
 import { SITE_URL } from "~/lib/site";
 import { strapiMedia } from "~/lib/strapi-media";
+import StageGallery from "~/components/stage/StageGallery";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
@@ -124,6 +125,8 @@ export default function Stage({ loaderData }: Route.ComponentProps) {
           <TableOfContents headings={headings} />
         </div>
       </section>
+
+      <StageGallery stage={stage} />
 
       <StageNav prev={prev} next={next} />
     </article>
