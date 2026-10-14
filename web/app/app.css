@@ -662,6 +662,7 @@ html {
     border-radius: 999px;
     border: 1px solid var(--border-control);
     color: var(--ink-2);
+    transition: all var(--duration-base);
 
     &[aria-current] {
       background: var(--nibi);
@@ -710,6 +711,7 @@ html {
   .stage-data-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 4px;
 
     @media (min-width: 1024px) {
       grid-template-columns: repeat(6, minmax(0, 1fr)) auto;
