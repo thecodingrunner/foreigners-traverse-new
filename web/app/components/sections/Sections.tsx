@@ -1,7 +1,7 @@
 import type { Page } from "~/data/pages.server";
 import type { RideTotals, StageSummary } from "~/data/stages.server";
 import Hero from "./Hero";
-import FeaturedStages from "./LatestStages";
+import FeaturedStages from "./FeaturedStages";
 import ExploreCTA from "./ExploreCTA";
 
 type Props = {

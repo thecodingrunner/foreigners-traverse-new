@@ -26,9 +26,9 @@ const dictionary = {
       subtitle: "Written on the road, 2026. Built with Next.js and Strapi.",
     },
     stats: { distance: "Distance", days: "Days", climb: "Climb" },
-    latestStages: {
-      title: "Latest entries",
-      subtitle: "最新の記事",
+    featuredStages: {
+      title: "Featured entries",
+      subtitle: "注目の記事",
       all: (n: number) => `All ${n} entries`,
     },
     exploreCta: {
@@ -163,8 +163,8 @@ const dictionary = {
       subtitle: "旅の途中で書きました。2026年。Next.js と Strapi で制作。",
     },
     stats: { distance: "走行距離", days: "日数", climb: "獲得標高" },
-    latestStages: {
-      title: "最新の記事",
+    featuredStages: {
+      title: "注目の記事",
       subtitle: "Featured entries",
       all: (n: number) => `全${n}件の記事`,
     },

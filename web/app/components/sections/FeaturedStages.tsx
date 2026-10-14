@@ -27,14 +27,14 @@ export default function FeaturedStages({
     <div className="padding-x margin-y">
       <div className="flex items-end justify-between border-b border-border pb-5 mb-10">
         <div className="flex flex-col items-start gap-1">
-          <h3 className="text-h3">{t.latestStages.title}</h3>
+          <h3 className="text-h3">{t.featuredStages.title}</h3>
           <p className="text-muted-foreground text-ui">
-            {t.latestStages.subtitle}
+            {t.featuredStages.subtitle}
           </p>
         </div>
 
         <Link to="/journal" className="link-text">
-          {t.latestStages.all(totals?.days ?? 0)} →
+          {t.featuredStages.all(totals?.days ?? 0)} →
         </Link>
       </div>
 
