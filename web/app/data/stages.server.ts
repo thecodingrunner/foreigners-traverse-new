@@ -1,7 +1,15 @@
 import { strapi } from "~/lib/strapi.server";
-import { StagesQuery, RideTotalsQuery, StageQuery, AdjacentStagesQuery, MapStagesQuery, ExploreStagesQuery } from "~/graphql/stages";
+import {
+  StagesQuery,
+  RideTotalsQuery,
+  StageQuery,
+  AdjacentStagesQuery,
+  MapStagesQuery,
+  ExploreStagesQuery,
+} from "~/graphql/stages";
 import type { StageFiltersInput } from "~/gql/graphql";
 import type { Locale } from "~/lib/i18n";
+import { toGalleryPhotos } from "~/lib/gallery";
 
 const MEDIA_BASE = process.env.STRAPI_PUBLIC_URL ?? "";
 
@@ -54,15 +62,19 @@ export async function getFeaturedStages(locale: Locale, limit = 3) {
 
 export type RoutePreview = {
   distanceKm: number;
-  line: [number, number][];     // [lon, lat]
-  profile: [number, number][];  // [km, elevation m]
+  line: [number, number][]; // [lon, lat]
+  profile: [number, number][]; // [km, elevation m]
 };
 
 export async function getStage(slug: string, locale: Locale) {
   const { stages } = await strapi.request(StageQuery, { slug, locale });
   const stage = stages[0];
   if (!stage) return null;
-  return { ...stage, routePreview: stage.routePreview as RoutePreview | null };
+  return {
+    ...stage,
+    routePreview: stage.routePreview as RoutePreview | null,
+    gallery: toGalleryPhotos(stage.gallery, locale),
+  };
 }
 
 const round = (n: number, dp: number) => {
@@ -85,8 +97,8 @@ export async function getRideTotals() {
   return {
     ...totals,
     distanceKm: round(totals.distanceKm, 1),
-    elevationGainM: round(totals.elevationGainM, 1)
-  }
+    elevationGainM: round(totals.elevationGainM, 1),
+  };
 }
 
 export async function getAdjacentStages(stageNumber: number, locale: Locale) {
@@ -104,9 +116,11 @@ export async function getMapStages(locale: Locale) {
   const { stages } = await strapi.request(MapStagesQuery, { locale });
   return stages
     .filter((s) => s != null)
-    .map(({ prefectures,  ...stage }) => ({
+    .map(({ prefectures, ...stage }) => ({
       ...stage,
-      regions: [...new Set(prefectures.map((p) => p?.region).filter((r) => r != null))],
+      regions: [
+        ...new Set(prefectures.map((p) => p?.region).filter((r) => r != null)),
+      ],
     }));
 }
 
@@ -116,7 +130,7 @@ export async function getExploreStages(locale: Locale) {
 
   return stages
     .filter((s) => s != null)
-    .map(({ prefectures,  ...stage }) => {
+    .map(({ prefectures, ...stage }) => {
       totalKm += stage?.stats?.distanceKm ?? 0;
       const prefs = prefectures.filter((p) => p != null);
       return {
@@ -132,6 +146,8 @@ export type StagesResult = Awaited<ReturnType<typeof getStages>>;
 export type StageSummary = StagesResult["stages"][number];
 export type StageDetail = NonNullable<Awaited<ReturnType<typeof getStage>>>;
 export type RideTotals = Awaited<ReturnType<typeof getRideTotals>>;
-export type AdjacentStage = NonNullable<Awaited<ReturnType<typeof getAdjacentStages>>>;
+export type AdjacentStage = NonNullable<
+  Awaited<ReturnType<typeof getAdjacentStages>>
+>;
 export type MapStage = Awaited<ReturnType<typeof getMapStages>>[number];
 export type ExploreStage = Awaited<ReturnType<typeof getExploreStages>>[number];
