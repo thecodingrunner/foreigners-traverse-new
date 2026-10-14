@@ -2031,4 +2031,404 @@ html {
       }
     }
   }
+
+  /* ---------------------------------------------------------------- stage gallery */
+@layer components {
+  .stage-gallery {
+    margin-top: 40px;
+
+    @media (min-width: 1024px) {
+      margin-top: 88px;
+    }
+  }
+
+  .stage-gallery-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    border-top: 1px solid var(--nibi);
+    padding-top: 12px;
+    margin-bottom: 16px;
+
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    @media (min-width: 1024px) {
+      align-items: flex-end;
+      padding-top: 16px;
+      margin-bottom: 28px;
+
+      h2 {
+        font-size: 30px;
+      }
+    }
+  }
+
+  :lang(ja) .stage-gallery-head h2 {
+    letter-spacing: 0.01em;
+  }
+
+  /* The other-language title only fits next to the big desktop heading */
+  .stage-gallery-alt {
+    display: none;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--ink-3);
+
+    @media (min-width: 1024px) {
+      display: block;
+    }
+  }
+
+  .stage-gallery-count {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    @media (min-width: 1024px) {
+      font-size: 11px;
+    }
+  }
+
+  .stage-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+
+    figure {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Phones: a tight square grid, no captions (they're in the lightbox) */
+    figcaption {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px 16px;
+
+      figcaption {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+        font-size: 13px;
+      }
+    }
+  }
+
+  .stage-gallery-place-alt {
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+
+  .stage-gallery-thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    cursor: zoom-in;
+    overflow: hidden;
+    /* Shows while the photo loads, and behind any transparent PNG */
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--placeholder-a) 0 10px,
+      var(--placeholder-b) 10px 20px
+    );
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--duration-base) var(--ease-out-soft);
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+
+    &:hover,
+    &:focus-visible {
+      outline: 2px solid var(--nibi);
+      outline-offset: 3px;
+    }
+
+    @media (min-width: 1024px) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  /* ---------------------------------------------------------------- lightbox */
+
+  /* Native <dialog> resets: fill the screen instead of floating in the middle */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--nibi-deep);
+    color: var(--gofun);
+
+    &[open] {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 56px minmax(0, 1fr) auto;
+      grid-template-areas:
+        "bar"
+        "photo"
+        "info";
+    }
+
+    /* Opaque, so the page never ghosts through behind the photo */
+    &::backdrop {
+      background: var(--nibi-deep);
+    }
+
+    @media (min-width: 1024px) {
+      &[open] {
+        grid-template-columns: 104px minmax(0, 1fr) 104px;
+        grid-template-rows: 72px minmax(0, 1fr) auto;
+        grid-template-areas:
+          "bar  bar   bar"
+          "prev photo next"
+          "info info  info";
+      }
+    }
+  }
+
+  /* The page behind shouldn't scroll while the lightbox is open */
+  html:has(.lightbox[open]) {
+    overflow: hidden;
+  }
+
+  .lightbox-bar {
+    grid-area: bar;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 4px 0 20px;
+    font-family: var(--font-mono);
+
+    @media (min-width: 1024px) {
+      padding: 0 20px 0 32px;
+      border-bottom: 1px solid rgb(252 251 246 / 0.12);
+    }
+  }
+
+  .lightbox-count {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+
+    @media (min-width: 1024px) {
+      font-size: 13px;
+    }
+  }
+
+  .lightbox-title {
+    display: none;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: rgb(252 251 246 / 0.6);
+    text-transform: uppercase;
+
+    @media (min-width: 1024px) {
+      display: block;
+    }
+  }
+
+  .lightbox-close {
+    grid-column: 3;
+    justify-self: end;
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    cursor: pointer;
+
+    &:hover {
+      background: rgb(252 251 246 / 0.1);
+    }
+  }
+
+  .lightbox-photo {
+    grid-area: photo;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Our swipe handler owns touch gestures here (see useSwipe) */
+    touch-action: none;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      user-select: none;
+    }
+
+    @media (min-width: 1024px) {
+      padding: 28px 0;
+    }
+  }
+
+  /* Phones: small arrows over the photo's edges. Desktop: their own columns. */
+  .lightbox-arrow {
+    grid-area: photo;
+    align-self: center;
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    margin: 0 6px;
+    border-radius: 50%;
+    border: 1px solid rgb(252 251 246 / 0.3);
+    background: rgb(38 36 39 / 0.55);
+    font-size: 16px;
+    cursor: pointer;
+
+    &.is-prev {
+      justify-self: start;
+    }
+
+    &.is-next {
+      justify-self: end;
+    }
+
+    &:hover {
+      background: rgb(252 251 246 / 0.12);
+    }
+
+    @media (min-width: 1024px) {
+      width: 56px;
+      height: 56px;
+      margin: 0;
+      background: transparent;
+      font-size: 18px;
+
+      &.is-prev {
+        grid-area: prev;
+        justify-self: center;
+      }
+
+      &.is-next {
+        grid-area: next;
+        justify-self: center;
+      }
+    }
+  }
+
+  .lightbox-close,
+  .lightbox-arrow {
+    &:focus-visible {
+      outline: 2px solid var(--gofun);
+      outline-offset: 2px;
+    }
+  }
+
+  .lightbox-info {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 20px 28px;
+    border-top: 1px solid rgb(252 251 246 / 0.12);
+
+    @media (min-width: 1024px) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 48px;
+      row-gap: 6px;
+      align-items: end;
+      padding: 20px 104px 30px;
+    }
+  }
+
+  .lightbox-caption {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 60ch;
+    text-wrap: pretty;
+
+    @media (min-width: 1024px) {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      font-size: 19px;
+    }
+  }
+
+  :lang(ja) .lightbox-caption {
+    line-height: 1.95;
+    letter-spacing: 0.04em;
+    word-break: auto-phrase;
+  }
+
+  /* Phones: place names first, then the caption. Desktop: right-hand column. */
+  .lightbox-places {
+    order: -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 8px;
+
+    @media (min-width: 1024px) {
+      grid-column: 2;
+      grid-row: 1;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+
+  .lightbox-place {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .lightbox-place-alt {
+    font-size: 12px;
+    color: rgb(252 251 246 / 0.6);
+  }
+
+  .lightbox-hint {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgb(252 251 246 / 0.5);
+
+    @media (min-width: 1024px) {
+      grid-column: 2;
+      justify-self: end;
+    }
+
+    /* Show the hint for the input the reader actually has */
+    &.is-keys {
+      display: none;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      &.is-keys {
+        display: block;
+      }
+
+      &.is-touch {
+        display: none;
+      }
+    }
+  }
+}
 }
