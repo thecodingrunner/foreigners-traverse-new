@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import type { StageSummary } from "~/data/stages.server";
 import { formatDate, formatStageDay } from "~/lib/format";
-import { useLocale } from "~/lib/i18n";
+import { localePath, useLocale } from "~/lib/i18n";
 import { placeName } from "~/lib/places";
 import { strapiMedia } from "~/lib/strapi-media";
 
@@ -18,7 +18,10 @@ export default function StageCard({ stage }: StageCardProps) {
   const coverSrc = strapiMedia(stage.coverImage?.url);
 
   return (
-    <Link className="stage-card relative" to={`/journal/${stage.slug}`}>
+    <Link
+      className="stage-card relative"
+      to={localePath(`/journal/${stage.slug}`, locale)}
+    >
       <div className="stage-card-cover">
         {coverSrc ? (
           <img src={coverSrc} />

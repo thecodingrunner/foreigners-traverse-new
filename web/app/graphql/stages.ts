@@ -98,6 +98,7 @@ export const StageQuery = graphql(`
           alternativeText
           width
           height
+          formats
         }
       }
       prefectures {

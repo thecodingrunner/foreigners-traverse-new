@@ -17,7 +17,7 @@ export default function StageNav({ prev, next }: StageNavProps) {
   const nextRoute = routeLabel(next ?? {}, locale);
 
   return (
-    <nav className="flex flex-col md:flex-row justify-between border-t border-border pt-6">
+    <nav className="flex flex-col md:flex-row justify-between border-t border-border pt-6 mt-10 md:mt-16">
       {prev ? (
         <Link
           to={localePath(`/journal/${prev.slug}`, locale)}

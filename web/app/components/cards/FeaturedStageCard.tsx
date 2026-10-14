@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import type { StageSummary } from "~/data/stages.server";
 import { formatDate, formatNumber, formatStageDay } from "~/lib/format";
-import { useLocale } from "~/lib/i18n";
+import { localePath, useLocale } from "~/lib/i18n";
 import { placeName } from "~/lib/places";
 
 type FeaturedStageCardProps = {
@@ -28,7 +28,10 @@ export default function FeaturedStageCard({ stage }: FeaturedStageCardProps) {
   ].filter(Boolean);
 
   return (
-    <Link className="stage-card relative" to={`/journal/${stage.slug}`}>
+    <Link
+      className="stage-card relative"
+      to={localePath(`/journal/${stage.slug}`, locale)}
+    >
       <div className="stage-card-cover">
         {coverImage?.url ? (
           <img
@@ -50,7 +53,7 @@ export default function FeaturedStageCard({ stage }: FeaturedStageCardProps) {
 
       {meta.length > 0 && <p className="text-label-sm">{meta.join(" · ")}</p>}
 
-      {(start && end) && (
+      {start && end && (
         <p className="text-ui hidden md:block">
           {start.primary}
           <span className="text-accent"> → </span>
