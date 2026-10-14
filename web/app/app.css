@@ -32,8 +32,28 @@
   --border-subtle: #efece3;
   --border: #e3dfd5;
   --border-control: #cfc9bd;
+
+  /* ---- 3D explorer tokens (from the design system's "Explorer and map tokens") */
   --sky-zenith: #262427; /* top of frame */
   --sky-horizon: #4a4547; /* horizon + fog */
+  --sky-sun: var(--akane);
+  --sea: #302e31;
+  --terrain-base: #433f3e;
+  --terrain-high: #6a625c;
+  --hillshade-light: var(--gofun);
+  --hillshade-shadow: #1f1d20;
+  --contour-minor: rgba(252, 251, 246, 0.07);
+  --contour-major: rgba(252, 251, 246, 0.18);
+  --coastline: var(--nezumi);
+  --route-ridden: #c9573f;
+  --route-ridden-halo: var(--akane);
+  --route-unridden: rgba(252, 251, 246, 0.4);
+  --marker-current: var(--gofun);
+  --marker-stage: var(--nezumi);
+  --marker-stage-passed: var(--gofun);
+  --marker-stage-selected: var(--akane);
+  --marker-terminus: var(--akane);
+  --label: rgba(252, 251, 246, 0.86);
 
   --tracking-h1: -0.035em;
   --tracking-prose: 0;
@@ -1056,5 +1076,959 @@ html {
     width: 100%;
     height: 80px;
     object-fit: cover;
+  }
+
+  /* Explore 3D page styles */
+  .explore {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100dvh;
+    overflow: hidden;
+    color: var(--gofun);
+    background: linear-gradient(
+      180deg,
+      var(--sky-zenith) 0%,
+      var(--sky-horizon) 100%
+    );
+  }
+
+  .explore-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+
+    @media (min-width: 1024px) {
+      padding: 20px 28px;
+    }
+
+    .language-switch {
+      border-color: rgb(252 251 246 / 0.28);
+      a {
+        color: rgb(252 251 246 / 0.7);
+      }
+      a[aria-current] {
+        background: var(--gofun);
+        color: var(--nibi);
+      }
+    }
+  }
+
+  .explore-divider {
+    width: 1px;
+    height: 20px;
+    background: rgb(252 251 246 / 0.25);
+  }
+
+  .explore-modes {
+    display: flex;
+    padding: 3px;
+    border: 1px solid rgb(252 251 246 / 0.22);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    button {
+      padding: 9px 16px;
+      border-radius: 999px;
+      color: rgb(252 251 246 / 0.75);
+
+      &[aria-pressed="true"] {
+        background: var(--gofun);
+        color: var(--nibi);
+      }
+    }
+  }
+
+  .explore-stage-area {
+    position: relative;
+    overflow: hidden;
+
+    /* Red glow behind the route */
+    &::before {
+      content: "";
+      position: absolute;
+      left: 35%;
+      top: 40%;
+      width: 900px;
+      height: 900px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(149, 31, 31, 0.45) 0%,
+        rgba(149, 31, 31, 0) 65%
+      );
+      pointer-events: none;
+    }
+  }
+
+  .explore-panel {
+    position: absolute;
+    inset: auto 16px 16px 16px; /* mobile: bottom of the stage area until step 7's sheet */
+    z-index: 1;
+    max-height: calc(100% - 32px);
+    overflow-y: auto;
+    padding: 24px;
+    background: var(--gofun);
+    color: var(--nibi);
+    box-shadow: var(--shadow-overlay);
+    z-index: 3; /* was 1: must sit above the scene labels */
+
+    @media (min-width: 1024px) {
+      inset: 24px 28px auto auto;
+      width: 420px;
+      padding: 28px;
+    }
+  }
+
+  .explore-places {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 20px 0 22px;
+
+    li {
+      position: relative;
+      padding-left: 30px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 0.55em;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid var(--nibi);
+      }
+
+      &[data-kind="end"]::before {
+        background: var(--akane);
+        border-color: var(--akane);
+      }
+    }
+  }
+
+  .explore-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--border);
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+
+      &:nth-child(odd) {
+        border-right: 1px solid var(--border);
+      }
+      &:nth-last-child(-n + 2) {
+        border-bottom: none;
+      }
+    }
+  }
+
+  .explore-read {
+    display: block;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .explore-timeline {
+    display: grid;
+    gap: 16px;
+    padding: 18px 20px 22px;
+    background: var(--nibi-deep);
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 40px;
+      padding: 24px 28px 28px;
+    }
+  }
+
+  /* ---- Whole-ride elevation profile (timeline) */
+  .elevation-profile {
+    position: relative;
+    height: 64px;
+    --progress: 0;
+    --rider-height: 0;
+  }
+  .elevation-profile svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  /* The ridden copy is cropped at the playhead: inset(top right bottom left) */
+  .elevation-profile-ahead,
+  .elevation-profile-ridden {
+    position: absolute;
+    inset: 0;
+  }
+  .elevation-profile-ridden {
+    clip-path: inset(0 calc((1 - var(--progress)) * 100%) 0 0);
+  }
+  .elevation-profile-area {
+    fill: rgb(252 251 246 / 0.07);
+  }
+  .elevation-profile-line {
+    fill: none;
+    stroke: rgb(252 251 246 / 0.35);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke; /* 1.5px on screen, however the SVG is stretched */
+    stroke-linejoin: round;
+  }
+  .elevation-profile-ridden .elevation-profile-area {
+    fill: color-mix(in srgb, var(--akane) 35%, transparent);
+  }
+  .elevation-profile-ridden .elevation-profile-line {
+    stroke: var(--route-ridden);
+  }
+
+  .elevation-profile-dot {
+    position: absolute;
+    left: calc(var(--progress) * 100%);
+    bottom: calc(var(--rider-height) * 100%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gofun);
+    box-shadow: 0 0 0 2.5px var(--akane);
+    translate: -50% 50%;
+    pointer-events: none;
+  }
+
+  .explore-timeline-status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 18px;
+  }
+
+  .explore-play {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--gofun);
+    color: var(--nibi);
+    font-size: 14px;
+
+    &:focus-visible {
+      outline: 2px solid var(--gofun);
+      outline-offset: 3px;
+    }
+  }
+
+  .explore-speed {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-basis: 100%;
+    font-family: var(--font-mono);
+    font-size: 11px;
+
+    .text-label-sm {
+      color: rgb(252 251 246 / 0.5);
+    }
+
+    button {
+      padding: 6px 10px;
+      margin-left: -11px; /* collapse the shared borders */
+      border: 1px solid rgb(252 251 246 / 0.22);
+      color: rgb(252 251 246 / 0.75);
+
+      &:first-of-type {
+        margin-left: 0;
+      }
+      &[aria-pressed="true"] {
+        background: var(--gofun);
+        color: var(--nibi);
+      }
+    }
+  }
+
+  .explore-regions {
+    display: flex;
+
+    > * {
+      flex-basis: 0;
+      min-width: 0;
+    }
+  }
+
+  .explore-track {
+    --progress: 0;
+    --bar-band: 28px; /* the strip under the profile that holds the bar */
+    position: relative;
+    padding-bottom: var(--bar-band); /* the profile sits above, in normal flow */
+    cursor: pointer;
+    touch-action: none;
+
+    /* Unridden base bar: 4px, centred in the bottom band */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: auto 0 12px 0;
+      height: 4px;
+      background: rgb(252 251 246 / 0.18);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--gofun);
+      outline-offset: 4px;
+    }
+  }
+
+  .explore-track-fill {
+    position: absolute;
+    left: 0;
+    bottom: 12px;
+    height: 4px;
+    width: calc(var(--progress) * 100%);
+    background: var(--akane);
+  }
+
+  .explore-track-segments {
+    position: absolute;
+    inset: auto 0 12px 0;
+    height: 4px;
+    display: flex;
+
+    > * {
+      flex-basis: 0;
+      min-width: 0;
+      box-shadow: inset -2px 0 0 var(--nibi-deep); /* divider between stages */
+
+      &[data-current="true"] {
+        background: rgb(252 251 246 / 0.9);
+      }
+    }
+  }
+
+  .explore-track-handle {
+    position: absolute;
+    bottom: calc(var(--bar-band) / 2); /* the middle of the bar band */
+    left: calc(var(--progress) * 100%);
+    width: 16px;
+    height: 16px;
+    transform: translate(-50%, 50%);
+    border-radius: 50%;
+    background: var(--gofun);
+    border: 3px solid var(--akane);
+    pointer-events: none;
+  }
+
+  /* Explore view styles */
+
+  /* Layers: glow (::before) → canvas → labels → panel */
+  .explore-viewport {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    /* ---- Sky: painted by CSS behind a transparent canvas */
+    background:
+      radial-gradient(
+        ellipse 60% 45% at 50% 18%,
+        color-mix(in srgb, var(--sky-sun) 50%, transparent),
+        transparent 72%
+      ),
+      linear-gradient(to bottom, var(--sky-zenith), var(--sky-horizon) 55%);
+  }
+
+  .explore-scene,
+  .scene-labels {
+    position: absolute;
+    inset: 0;
+  }
+
+  .scene-labels {
+    overflow: hidden;
+    pointer-events: none; /* let drags reach the canvas */
+  }
+
+  /* Loading */
+  .scene-status {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: var(--gofun);
+  }
+
+  .scene-status-percent {
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .scene-status-bar {
+    width: min(320px, 70%);
+    height: 3px;
+    background: rgb(252 251 246 / 0.2);
+
+    span {
+      display: block;
+      height: 100%;
+      background: var(--akane-light);
+      transition: width var(--duration-fast);
+    }
+  }
+
+  /* No WebGL / error */
+  .scene-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    gap: 16px;
+    width: min(560px, calc(100% - 32px));
+    padding: 36px;
+    transform: translate(-50%, -50%);
+    background: rgb(38 36 39 / 0.85);
+    border: 1px solid rgb(252 251 246 / 0.15);
+    color: var(--gofun);
+
+    .text-body {
+      color: rgb(252 251 246 / 0.75);
+    }
+  }
+
+  /* ---- Stage ends: a 24px invisible hit area around a small dot */
+  .scene-stage-end {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .scene-stage-end::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--marker-stage);
+    transition:
+      width 150ms,
+      height 150ms;
+  }
+  .scene-stage-end[data-state="ridden"]::before {
+    background: var(--marker-stage-passed);
+  }
+  .scene-stage-end[data-state="current"]::before,
+  .scene-stage-end:hover::before {
+    width: 14px;
+    height: 14px;
+    background: var(--gofun);
+    box-shadow: inset 0 0 0 3px var(--marker-stage-selected);
+  }
+
+  /* ---- Fukuoka / Aomori */
+  .scene-square {
+    display: block;
+    width: 9px;
+    height: 9px;
+    background: var(--marker-terminus);
+    outline: 1.5px solid var(--gofun);
+  }
+
+  /* ---- The rider, with a ring that pulses outwards */
+  .scene-rider {
+    position: relative;
+    display: block;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: var(--marker-current);
+    border: 3.5px solid var(--akane);
+  }
+  .scene-rider::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--akane);
+    translate: -50% -50%;
+    animation: rider-pulse 2s ease-out infinite;
+  }
+  @keyframes rider-pulse {
+    from {
+      width: 16px;
+      height: 16px;
+      opacity: 0.9;
+    }
+    to {
+      width: 48px;
+      height: 48px;
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scene-rider::after {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  /* ---- Place labels, with a dark halo so they read over any terrain */
+  .scene-city {
+    font-family: var(--font-mono, monospace);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--label);
+    text-shadow:
+      0 0 4px var(--sky-zenith),
+      0 0 4px var(--sky-zenith),
+      0 0 2px var(--sky-zenith);
+  }
+  :lang(ja) .scene-city {
+    font-family: var(--font-sans, "M PLUS 1", sans-serif);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---- Camera mode switch (top bar) */
+  .camera-modes {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgb(38 36 39 / 0.8);
+    border: 1px solid rgb(252 251 246 / 0.18);
+  }
+  .camera-mode {
+    min-height: 36px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: rgb(252 251 246 / 0.75);
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .camera-mode:hover {
+    color: var(--gofun);
+  }
+  .camera-mode[aria-checked="true"] {
+    background: var(--gofun);
+    color: var(--nibi);
+  }
+  .camera-mode:focus-visible {
+    outline: 2px solid var(--akane);
+    outline-offset: 2px;
+  }
+  :lang(ja) .camera-mode {
+    font-family: var(--font-ja, "M PLUS 1", sans-serif);
+    font-size: 12px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* ---- Orbit mode: grab cursor, and stop touch drags scrolling the page */
+  .explore-canvas canvas.is-orbit {
+    cursor: grab;
+    touch-action: none;
+  }
+  .explore-canvas canvas.is-dragging {
+    cursor: grabbing;
+  }
+
+  /* ---- "Drag to orbit" hint, kept clear of the UI using the measured insets */
+  .scene-orbit-hint {
+    position: absolute;
+    left: calc(var(--scene-inset-left, 0px) + 28px);
+    bottom: calc(var(--scene-inset-bottom, 0px) + 20px);
+    margin: 0;
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: rgb(252 251 246 / 0.7);
+    pointer-events: none;
+  }
+
+  /* Mobile explore sheet styles */
+  @media (max-width: 1023.98px) {
+    .explore-panel,
+    .explore-timeline {
+      display: none;
+    }
+
+    /* Top bar: back + language on the first row, camera switch centred below.
+       The ::after is an invisible full-width item that forces the line break. */
+    .explore-topbar {
+      flex-wrap: wrap;
+      row-gap: 10px;
+      padding: 8px 12px 10px;
+
+      &::after {
+        content: "";
+        order: 2;
+        flex-basis: 100%;
+      }
+    }
+    .camera-modes {
+      order: 3;
+      margin-inline: auto;
+    }
+    .camera-mode {
+      min-height: 44px; /* touch target */
+    }
+  }
+
+  .explore-sheet {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    height: min(318px, 60%);
+    background: var(--gofun);
+    color: var(--nibi);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -12px 40px rgb(0 0 0 / 0.35);
+    overflow: hidden;
+    transition: height 350ms cubic-bezier(0.3, 0.7, 0.2, 1);
+
+    &[data-expanded="true"] {
+      height: min(610px, calc(100% - 16px));
+    }
+    &[data-dragging="true"] {
+      transition: none; /* follow the finger exactly */
+    }
+
+    @media (min-width: 1024px) {
+      display: none;
+    }
+  }
+
+  .explore-sheet-handle {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    height: 28px;
+    cursor: grab;
+    touch-action: none; /* a vertical drag resizes the sheet, not scrolls the page */
+
+    span {
+      width: 40px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--border-control);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--akane);
+      outline-offset: -4px;
+    }
+  }
+
+  .explore-sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 20px 20px;
+
+    .explore-sheet[data-expanded="true"] & {
+      overflow-y: auto; /* long excerpts scroll inside the open sheet */
+      overscroll-behavior: contain;
+    }
+  }
+
+  /* ---- Play + week scrubber */
+  .explore-sheet-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .explore-play {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      background: var(--nibi);
+      color: var(--gofun);
+      font-size: 13px;
+    }
+  }
+
+  .explore-sheet-scrubber {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sheet-track {
+    --progress: 0;
+    position: relative;
+    height: 44px;
+    cursor: pointer;
+    touch-action: none;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 20px 0 auto 0;
+      height: 4px;
+      background: rgb(59 57 60 / 0.14);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--akane);
+      outline-offset: 2px;
+    }
+  }
+  .sheet-track-fill {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    height: 4px;
+    width: calc(var(--progress) * 100%);
+    background: var(--akane);
+  }
+  .sheet-track-knob {
+    position: absolute;
+    top: 22px;
+    left: calc(var(--progress) * 100%);
+    width: 18px;
+    height: 18px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--gofun);
+    border: 3px solid var(--akane);
+    pointer-events: none;
+  }
+
+  .sheet-weeks {
+    display: flex;
+    margin-top: -8px;
+
+    span {
+      flex-basis: 0;
+      min-width: 0;
+      padding-left: 4px;
+      border-left: 1px solid var(--border-control);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--nezumi);
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+
+  /* ---- The day at a glance */
+  .explore-sheet-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 18px;
+  }
+  .sheet-day {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+
+    > :last-child {
+      min-width: 0;
+      text-align: right;
+    }
+  }
+  .sheet-route {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .sheet-route-alt {
+    margin-top: -2px;
+    font-size: 12px;
+    color: var(--nezumi);
+  }
+  .sheet-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 6px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    dd {
+      font-size: 16px;
+    }
+  }
+  .sheet-hint {
+    padding-top: 14px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--nezumi);
+  }
+
+  /* ---- Only when open */
+  .explore-sheet-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 18px;
+    opacity: 0; /* hidden while collapsed, fades in as the sheet opens */
+    transition: opacity 350ms cubic-bezier(0.3, 0.7, 0.2, 1);
+
+    .explore-sheet[data-expanded="true"] & {
+      opacity: 1;
+    }
+
+    .text-body {
+      margin: 0;
+    }
+    .sheet-read {
+      align-self: stretch;
+      text-align: center;
+    }
+    .explore-speed {
+      flex-basis: auto;
+
+      .text-label-sm {
+        margin-right: auto; /* label left, buttons grouped right */
+        color: var(--nezumi);
+      }
+      button {
+        min-width: 48px;
+        min-height: 44px;
+        border-color: var(--border-control);
+        color: var(--ink-2);
+
+        &[aria-pressed="true"] {
+          background: var(--nibi);
+          color: var(--gofun);
+        }
+      }
+    }
+  }
+
+  /* ---- Light elevation profile for the sheet */
+  .elevation-profile.is-light {
+    height: 56px;
+    flex-shrink: 0;
+    background: var(--surface-2);
+
+    .elevation-profile-area {
+      fill: rgb(59 57 60 / 0.08);
+    }
+    .elevation-profile-line {
+      stroke: rgb(59 57 60 / 0.35);
+    }
+    .elevation-profile-ridden .elevation-profile-area {
+      fill: color-mix(in srgb, var(--akane) 22%, transparent);
+    }
+    .elevation-profile-ridden .elevation-profile-line {
+      stroke: var(--akane);
+    }
+  }
+
+    /* ================================================================
+     Reduced motion
+     ================================================================ */
+  .reduced-motion-note {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 3;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    max-width: 520px;
+    margin: 0;
+    padding: 10px 14px;
+    background: rgb(38 36 39 / 0.85);
+    border: 1px solid rgb(252 251 246 / 0.2);
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgb(252 251 246 / 0.88);
+
+    span {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--akane-light);
+    }
+
+    @media (min-width: 1024px) {
+      top: 24px;
+      left: 24px;
+      right: auto;
+    }
+  }
+
+  .explore-playback.is-reduced {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .explore-steps {
+    display: flex;
+    gap: 6px;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgb(252 251 246 / 0.3);
+      color: var(--gofun);
+      font-size: 18px;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      &:focus-visible {
+        outline: 2px solid var(--gofun);
+        outline-offset: 2px;
+      }
+    }
+
+    /* Light version inside the mobile sheet */
+    .explore-sheet & button {
+      border-color: var(--border-control);
+      color: var(--nibi);
+
+      &:focus-visible {
+        outline-color: var(--akane);
+      }
+    }
   }
 }

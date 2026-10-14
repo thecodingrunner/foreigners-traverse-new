@@ -3,7 +3,7 @@ import type { Locale } from "~/lib/i18n";
 
 export const NAV = [
   { key: "journal", path: "/journal" },
-  { key: "explore", path: "/journal?view=explore" },
+  { key: "explore", path: "/explore" },
   { key: "about", path: "/about" },
 ] as const;
 

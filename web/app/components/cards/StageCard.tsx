@@ -3,6 +3,7 @@ import type { StageSummary } from "~/data/stages.server";
 import { formatDate, formatStageDay } from "~/lib/format";
 import { useLocale } from "~/lib/i18n";
 import { placeName } from "~/lib/places";
+import { strapiMedia } from "~/lib/strapi-media";
 
 type StageCardProps = {
   stage: StageSummary;
@@ -14,11 +15,13 @@ export default function StageCard({ stage }: StageCardProps) {
   const start = placeName(stage, "start", locale);
   const end = placeName(stage, "end", locale);
 
+  const coverSrc = strapiMedia(stage.coverImage?.url);
+
   return (
     <Link className="stage-card relative" to={`/journal/${stage.slug}`}>
       <div className="stage-card-cover">
-        {stage?.coverImage?.url ? (
-          <img src={stage?.coverImage?.url} />
+        {coverSrc ? (
+          <img src={coverSrc} />
         ) : (
           <div className="image-placeholder-large"></div>
         )}

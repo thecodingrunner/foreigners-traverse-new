@@ -1,7 +1,9 @@
 import { strapi } from "~/lib/strapi.server";
-import { StagesQuery, RideTotalsQuery, StageQuery, AdjacentStagesQuery, MapStagesQuery } from "~/graphql/stages";
+import { StagesQuery, RideTotalsQuery, StageQuery, AdjacentStagesQuery, MapStagesQuery, ExploreStagesQuery } from "~/graphql/stages";
 import type { StageFiltersInput } from "~/gql/graphql";
 import type { Locale } from "~/lib/i18n";
+
+const MEDIA_BASE = process.env.STRAPI_PUBLIC_URL ?? "";
 
 type StagesOptions = {
   page?: number;
@@ -63,9 +65,14 @@ export async function getStage(slug: string, locale: Locale) {
   return { ...stage, routePreview: stage.routePreview as RoutePreview | null };
 }
 
+const round = (n: number, dp: number) => {
+  const f = 10 ** dp;
+  return Math.round(n * f) / f;
+};
+
 export async function getRideTotals() {
   const { stages } = await strapi.request(RideTotalsQuery);
-  return stages.reduce(
+  const totals = stages.reduce(
     (totals, s) => ({
       distanceKm: totals.distanceKm + (s?.stats?.distanceKm ?? 0),
       elevationGainM: totals.elevationGainM + (s?.stats?.elevationGainM ?? 0),
@@ -74,6 +81,12 @@ export async function getRideTotals() {
     }),
     { distanceKm: 0, elevationGainM: 0, days: 0, prefectures: 0 },
   );
+
+  return {
+    ...totals,
+    distanceKm: round(totals.distanceKm, 1),
+    elevationGainM: round(totals.elevationGainM, 1)
+  }
 }
 
 export async function getAdjacentStages(stageNumber: number, locale: Locale) {
@@ -97,9 +110,28 @@ export async function getMapStages(locale: Locale) {
     }));
 }
 
+export async function getExploreStages(locale: Locale) {
+  const { stages } = await strapi.request(ExploreStagesQuery, { locale });
+  let totalKm = 0;
+
+  return stages
+    .filter((s) => s != null)
+    .map(({ prefectures,  ...stage }) => {
+      totalKm += stage?.stats?.distanceKm ?? 0;
+      const prefs = prefectures.filter((p) => p != null);
+      return {
+        ...stage,
+        prefectures: prefs,
+        region: prefs.at(-1)?.region ?? null,
+        totalSoFarKm: Math.round(totalKm),
+      };
+    });
+}
+
 export type StagesResult = Awaited<ReturnType<typeof getStages>>;
 export type StageSummary = StagesResult["stages"][number];
 export type StageDetail = NonNullable<Awaited<ReturnType<typeof getStage>>>;
 export type RideTotals = Awaited<ReturnType<typeof getRideTotals>>;
 export type AdjacentStage = NonNullable<Awaited<ReturnType<typeof getAdjacentStages>>>;
 export type MapStage = Awaited<ReturnType<typeof getMapStages>>[number];
+export type ExploreStage = Awaited<ReturnType<typeof getExploreStages>>[number];

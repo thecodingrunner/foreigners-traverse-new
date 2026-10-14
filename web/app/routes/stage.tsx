@@ -15,8 +15,8 @@ import TableOfContents from "~/components/stage/TableOfContents";
 import ElevationGraph from "~/components/stage/ElevationGraph";
 import { Link } from "react-router";
 import { useT } from "~/lib/dictionary";
-
-const SITE_URL = "https://foreigners-traverse.com";
+import { SITE_URL } from "~/lib/site";
+import { strapiMedia } from "~/lib/strapi-media";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
@@ -32,7 +32,13 @@ export async function loader({ params }: Route.LoaderArgs) {
       ? await getAdjacentStages(stage.stageNumber, locale)
       : { prev: null, next: null };
 
-  return { stage, prev, next, totals, headings };
+  return {
+    stage,
+    prev,
+    next,
+    totals,
+    headings,
+  };
 }
 
 export function meta({ loaderData }: Route.MetaArgs) {
@@ -63,7 +69,7 @@ export function meta({ loaderData }: Route.MetaArgs) {
 export default function Stage({ loaderData }: Route.ComponentProps) {
   const { stage, prev, next, totals, headings } = loaderData;
   const cover = stage.coverImage;
-  const coverSrc = cover?.url;
+  const coverSrc = strapiMedia(cover?.url);
 
   const t = useT();
 
@@ -80,11 +86,10 @@ export default function Stage({ loaderData }: Route.ComponentProps) {
           />
         )}
 
-        <Link className="btn-secondary" to={`/journal?view=explore`}>
+        <Link className="btn-secondary" to={`/explore`}>
           {t.stage.data.explore}
         </Link>
       </div>
-
 
       <div className="stage-cover-image mt-8">
         {coverSrc ? (
@@ -108,7 +113,7 @@ export default function Stage({ loaderData }: Route.ComponentProps) {
           )}
         </div>
 
-        <div className="flex flex-col gap-12 lg:sticky lg:top-24 lg:self-start">
+        <div className="hidden lg:flex flex-col gap-12 lg:sticky lg:top-24 lg:self-start">
           {stage.routePreview && stage.stageNumber != null && (
             <ElevationProfile
               profile={stage.routePreview.profile}
