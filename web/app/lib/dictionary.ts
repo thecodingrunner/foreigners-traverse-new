@@ -105,6 +105,13 @@ const dictionary = {
       hero: {
         cv: "Download CV",
       },
+      contents: "Contents",
+      stats: {
+        stack: "Stack",
+        japanese: "Japanese",
+        bike: "The Bike",
+        links: "Elsewhere"
+      }
     },
     explore: {
       day: (n: number) => `Day ${n}`,
@@ -246,6 +253,13 @@ const dictionary = {
       hero: {
         cv: "履歴書をダウンロード",
       },
+      contents: "目次",
+      stats: {
+        stack: "技術スタック",
+        japanese: "日本語",
+        bike: "自転車",
+        links: "リンク"
+      }
     },
     explore: {
       day: (n: number) => `${n}日目`,

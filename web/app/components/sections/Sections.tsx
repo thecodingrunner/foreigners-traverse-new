@@ -4,6 +4,7 @@ import Hero from "./Hero";
 import FeaturedStages from "./FeaturedStages";
 import ExploreCTA from "./ExploreCTA";
 import AboutHero from "./AboutHero";
+import AboutBlocks from "./AboutBlocks";
 
 type Props = {
   sections: Page["sections"];
@@ -22,7 +23,7 @@ export function Sections({
     switch (s?.__typename) {
       case "ComponentSectionsHero":
         return <Hero key={s.__typename} {...s} totals={totals} />;
-      case "ComponentSectionsExploreCta": 
+      case "ComponentSectionsExploreCta":
         return <ExploreCTA key={s.__typename} {...s} />;
       case "ComponentSectionsFeaturedStages":
         return (
@@ -34,12 +35,9 @@ export function Sections({
           />
         );
       case "ComponentSectionsAboutHero":
-        return (
-          <AboutHero
-            key={s.__typename}
-            {...s}
-          />
-        )
+        return <AboutHero key={s.__typename} {...s} />;
+      case "ComponentSectionsAboutBlocks":
+        return <AboutBlocks key={s.__typename} {...s} />;
       default:
         return null; // includes Strapi's `Error` member
     }
