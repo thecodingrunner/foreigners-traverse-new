@@ -13,6 +13,35 @@ export interface GalleryGallery extends Struct.ComponentSchema {
   };
 }
 
+export interface LinkLink extends Struct.ComponentSchema {
+  collectionName: 'components_link_links';
+  info: {
+    displayName: 'link';
+    icon: 'link';
+  };
+  attributes: {
+    href: Schema.Attribute.String;
+    text: Schema.Attribute.String;
+  };
+}
+
+export interface SectionsAboutHero extends Struct.ComponentSchema {
+  collectionName: 'components_sections_about_heroes';
+  info: {
+    displayName: 'About Hero';
+  };
+  attributes: {
+    body: Schema.Attribute.RichText;
+    cvFile: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    imageCaption: Schema.Attribute.String;
+    label: Schema.Attribute.String;
+    link: Schema.Attribute.Component<'link.link', false>;
+    title: Schema.Attribute.String;
+    titleAlt: Schema.Attribute.String;
+  };
+}
+
 export interface SectionsExploreCta extends Struct.ComponentSchema {
   collectionName: 'components_sections_explore_ctas';
   info: {
@@ -85,6 +114,8 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'gallery.gallery': GalleryGallery;
+      'link.link': LinkLink;
+      'sections.about-hero': SectionsAboutHero;
       'sections.explore-cta': SectionsExploreCta;
       'sections.featured-stages': SectionsFeaturedStages;
       'sections.hero': SectionsHero;
