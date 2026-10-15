@@ -51,7 +51,9 @@
       "components": [
         "sections.hero",
         "sections.featured-stages",
-        "sections.explore-cta"
+        "sections.explore-cta",
+        "sections.about-hero",
+        "sections.about-blocks"
       ]
     }
   }

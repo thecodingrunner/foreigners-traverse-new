@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_sections_about_blocks",
+  "info": {
+    "displayName": "About Blocks"
+  },
+  "options": {},
+  "attributes": {
+    "aboutBlocks": {
+      "type": "component",
+      "component": "about.about-block",
+      "repeatable": true
+    },
+    "aboutStats": {
+      "type": "component",
+      "component": "about-stats.about-stats",
+      "repeatable": false
+    }
+  },
+  "config": {}
+}

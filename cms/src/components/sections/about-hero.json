@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_sections_about_heroes",
+  "info": {
+    "displayName": "About Hero"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "titleAlt": {
+      "type": "string"
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "link": {
+      "type": "component",
+      "component": "link.link",
+      "repeatable": false
+    },
+    "cvFile": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "imageCaption": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

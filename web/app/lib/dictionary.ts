@@ -101,6 +101,18 @@ const dictionary = {
         swipeHint: "Swipe ← → to browse · swipe ↓ to close",
       },
     },
+    about: {
+      hero: {
+        cv: "Download CV",
+      },
+      contents: "Contents",
+      stats: {
+        stack: "Stack",
+        japanese: "Japanese",
+        bike: "The Bike",
+        links: "Elsewhere"
+      }
+    },
     explore: {
       day: (n: number) => `Day ${n}`,
       back: "Journal",
@@ -236,6 +248,18 @@ const dictionary = {
         next: "次の写真",
         swipeHint: "左右にスワイプで切り替え · 下にスワイプで閉じる",
       },
+    },
+    about: {
+      hero: {
+        cv: "履歴書をダウンロード",
+      },
+      contents: "目次",
+      stats: {
+        stack: "技術スタック",
+        japanese: "日本語",
+        bike: "自転車",
+        links: "リンク"
+      }
     },
     explore: {
       day: (n: number) => `${n}日目`,

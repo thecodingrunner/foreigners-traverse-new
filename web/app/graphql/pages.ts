@@ -18,6 +18,53 @@ export const PageQuery = graphql(`
         ... on ComponentSectionsExploreCta {
           heading
         }
+        ... on ComponentSectionsAboutHero {
+          link {
+            href
+            text
+          }
+          body
+          cvFile {
+            url
+            alternativeText
+          }
+          image {
+            alternativeText
+            url
+            height
+            width
+            formats
+          }
+          imageCaption
+          label
+          title
+          titleAlt
+        }
+        ... on ComponentSectionsAboutBlocks {
+          aboutBlocks {
+            body
+            image {
+              alternativeText
+              height
+              width
+              url
+              formats
+            }
+            imageCaption
+            quote
+            title
+            titleAlt
+          }
+          aboutStats {
+            bike
+            japanese
+            links {
+              href
+              text
+            }
+            stack
+          }
+        }
       }
       seo {
         metaDescription

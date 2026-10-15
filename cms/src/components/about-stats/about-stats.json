@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_about_stats_about_stats",
+  "info": {
+    "displayName": "About Stats"
+  },
+  "options": {},
+  "attributes": {
+    "stack": {
+      "type": "text"
+    },
+    "japanese": {
+      "type": "text"
+    },
+    "bike": {
+      "type": "text"
+    },
+    "links": {
+      "type": "component",
+      "component": "link.link",
+      "repeatable": true
+    }
+  },
+  "config": {}
+}

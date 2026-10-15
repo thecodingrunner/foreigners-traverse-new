@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_about_about_blocks",
+  "info": {
+    "displayName": "About Block"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "titleAlt": {
+      "type": "string"
+    },
+    "body": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "imageCaption": {
+      "type": "string"
+    },
+    "quote": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
