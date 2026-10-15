@@ -9,10 +9,20 @@ export type SceneColor = { color: Color; alpha: number };
  * converts the sRGB numbers from CSS into the linear values shaders work in.
  */
 function parse(value: string): SceneColor {
-    const rgba = value.match(/^rgba?\(([^)]+)\)$/);
-    if (!rgba) return { color: new Color(value), alpha: 1 };
-    const [r, g, b, a = 1] = rgba[1].split(/[\s,/]+/).filter(Boolean).map(Number);
-    return { color: new Color().setRGB(r / 255, g / 255, b / 255, SRGBColorSpace), alpha: a };
+  // The production CSS minifier rewrites rgba(…) as hex with alpha (#rrggbbaa),
+  // which three's Color can't read: it warns and falls back to opaque white.
+  const hex = value.match(/^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
+  if (hex) {
+    let h = hex[1];
+    if (h.length <= 4) h = [...h].map((c) => c + c).join(""); // #rgb(a) → #rrggbb(aa)
+    const alpha = h.length === 8 ? parseInt(h.slice(6), 16) / 255 : 1;
+    return { color: new Color(`#${h.slice(0, 6)}`), alpha };
+  }
+
+  const rgba = value.match(/^rgba?\(([^)]+)\)$/);
+  if (!rgba) return { color: new Color(value), alpha: 1 };
+  const [r, g, b, a = 1] = rgba[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+  return { color: new Color().setRGB(r / 255, g / 255, b / 255, SRGBColorSpace), alpha: a };
 }
 
 /**
