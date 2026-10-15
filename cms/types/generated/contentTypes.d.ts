@@ -471,6 +471,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'sections.featured-stages',
         'sections.explore-cta',
         'sections.about-hero',
+        'sections.about-blocks',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{

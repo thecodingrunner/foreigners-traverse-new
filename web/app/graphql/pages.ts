@@ -40,6 +40,31 @@ export const PageQuery = graphql(`
           title
           titleAlt
         }
+        ... on ComponentSectionsAboutBlocks {
+          aboutBlocks {
+            body
+            image {
+              alternativeText
+              height
+              width
+              url
+              formats
+            }
+            imageCaption
+            quote
+            title
+            titleAlt
+          }
+          aboutStats {
+            bike
+            japanese
+            links {
+              href
+              text
+            }
+            stack
+          }
+        }
       }
       seo {
         metaDescription
