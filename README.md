@@ -168,40 +168,62 @@ A change to a content type in Strapi surfaces as a TypeScript error in the front
 ```mermaid
 erDiagram
     STAGE {
-        int     dayNumber "ordering key"
-        string  title "localised"
-        string  slug
-        text    excerpt "localised"
+        int      stageNumber "ordering key"
+        string   title "localised"
+        string   slug
+        date     date
+        text     excerpt "localised"
         richtext body "localised"
-        string  startName "localised"
-        string  endName "localised"
-        float   distanceKm
-        int     elevationGainM
-        date    rideDate
+        string   startNameEn
+        string   startNameJa
+        string   endNameEn
+        string   endNameJa
+        boolean  featured
+        media    coverImage
+        media    gpxFile "source track"
+        string   routeFile "path to static geometry"
+        json     routePreview "simplified polyline"
+    }
+    STATS {
+        float  distanceKm
+        int    elevationGainM
+        int    elevationLossM
+        int    movingTimeMin
+        enum   weather
+        float  tempC
+        enum   sleptAt
+    }
+    GALLERY_ITEM {
+        media  image
+        string caption
+        string alt
+    }
+    SEO {
+        string metaTitle
+        text   metaDescription
+        media  ogImage
     }
     PREFECTURE {
-        string code "e.g. JP-40"
-        string name "localised"
+        int    code "JIS prefecture code"
+        string nameEn
+        string nameJa
         string region "e.g. 九州, 近畿"
     }
-    ARTICLE {
-        string title "localised"
-        string slug
-        richtext body "localised"
-        string kind "epilogue / essay"
-    }
 
+    STAGE ||--o| STATS : "stats"
+    STAGE ||--o{ GALLERY_ITEM : "gallery"
+    STAGE ||--o| SEO : "seo"
     STAGE }o--o{ PREFECTURE : "passes through"
 ```
 
 **Modelling choices**
 
-- **Stages are ordered only by `dayNumber`.** There is deliberately no "newest first" option.
+- **Stages are ordered only by `stageNumber`.** There is deliberately no "newest first" option.
 - **Both locales are required.** A stage is not publishable in one language only; the bilingual pairing is part of the content, not an optional translation.
-- **Prefectures are stored as codes, not display names**, so renaming or relocalising never needs a data migration.
-- **Place names are bilingual fields** (`startName`, `endName`), so map popups and the 3D panel show 鹿児島 or Kagoshima depending on the locale.
-- **Epilogue articles are a separate type**, so essays that sit outside the ride don't break the stage sequence.
-- **Route geometry is not in the CMS.** It is generated from the GPX files into static files (see below) and joined to stages by day number, keeping the GraphQL payloads small.
+- **Place names are stored as explicit En/Ja pairs** (`startNameEn` / `startNameJa` and so on), so the map and 3D explorer can show 鹿児島 or Kagoshima without fetching a second locale.
+- **Prefectures are a separate type keyed by their numeric code**, with both names stored, so a stage links to prefectures rather than repeating display names.
+- **Reusable components** (`Stats`, `Gallery`, `Seo`) keep the stage type tidy and make the GraphQL fragments easy to share between queries.
+- **Route geometry is mostly outside the CMS.** The original GPX file is kept as media and currently unused (GPX not accessed directly other than by node scripts), the scripts turn it into static files that `routeFile` points to, and only a small simplified `routePreview` is stored on the stage. This keeps GraphQL responses small.
 
 ---
 
