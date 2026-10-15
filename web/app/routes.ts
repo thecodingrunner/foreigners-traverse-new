@@ -7,7 +7,7 @@ export default [
       index("routes/home.tsx"),
       route("journal", "routes/journal.tsx"),
       route("journal/:slug", "routes/stage.tsx"),
-    //   route("about", "routes/about.tsx"),
+      route("about", "routes/about.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;

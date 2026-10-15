@@ -3,6 +3,7 @@ import type { RideTotals, StageSummary } from "~/data/stages.server";
 import Hero from "./Hero";
 import FeaturedStages from "./FeaturedStages";
 import ExploreCTA from "./ExploreCTA";
+import AboutHero from "./AboutHero";
 
 type Props = {
   sections: Page["sections"];
@@ -32,6 +33,13 @@ export function Sections({
             totals={totals}
           />
         );
+      case "ComponentSectionsAboutHero":
+        return (
+          <AboutHero
+            key={s.__typename}
+            {...s}
+          />
+        )
       default:
         return null; // includes Strapi's `Error` member
     }
