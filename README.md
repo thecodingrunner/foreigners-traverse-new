@@ -510,7 +510,7 @@ flowchart LR
 
 AI tools were a deliberate part of the workflow, used to speed up the work rather than to replace understanding it.
 
-- **Planning before code.** Before writing any code, I wrote up the project as a brief, an architecture document, a technical spec and a roadmap, plus an `AGENTS.md` setting out conventions for AI-assisted work. Each feature then had a defined build order (see the [3D explorer](#3d-explorer) and [map view](#map-view) sections), so every session started with a clear, small goal.
+- **Planning before code.** Before writing any code, I wrote up the project as a brief, an architecture document, a technical spec and a roadmap. Each feature then had a defined build order (see the [3D explorer](#3d-explorer) and [map view](#map-view) sections), so every session started with a clear, small goal.
 - **Design.** The visual design and design system were created with Claude Design, then implemented as Tailwind tokens and extended in code. For example, the same colour tokens drive the MapLibre map styles and the 3D terrain shader, so all three views look like one product.
 - **Implementation.** I used Claude as a pair programmer. I read and understood every change before committing it, and nothing went in that I couldn't explain. The architectural choices were my own: the content model, where state lives, what stays out of the CMS, and the HTML-first approach to 3D. The reasoning behind each is in [Key decisions](#key-decisions).
 
