@@ -38,7 +38,7 @@ export default function Footer() {
         {NAV.map(({ key, path }) => (
           <NavLink
             key={key}
-            to={localePath(path, locale)}
+            to={key === "github" ? path : localePath(path, locale)}
             className={({ isActive }) =>
               isActive
                 ? "text-foreground"

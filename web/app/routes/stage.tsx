@@ -18,6 +18,8 @@ import { useT } from "~/lib/dictionary";
 import { SITE_URL } from "~/lib/site";
 import { strapiMedia } from "~/lib/strapi-media";
 import StageGallery from "~/components/stage/StageGallery";
+import { useRef } from "react";
+import ReadingProgress from "~/components/stage/ReadingProgress";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const locale = getLocale(params.lang);
@@ -72,63 +74,69 @@ export default function Stage({ loaderData }: Route.ComponentProps) {
   const cover = stage.coverImage;
   const coverSrc = strapiMedia(cover?.url);
 
+  const bodyRef = useRef<HTMLElement>(null);
+
   const t = useT();
 
   return (
     <article className="padding-x my-10 flex flex-col">
-      <StageHeader stage={stage} totals={totals} />
+      <ReadingProgress target={bodyRef} />
 
-      <div className="flex flex-col gap-4 md:hidden">
-        {stage.routePreview && (
-          <ElevationGraph
-            profile={stage.routePreview.profile}
-            distanceKm={stage.routePreview.distanceKm}
-            displayLabels={false}
-          />
-        )}
+      <section ref={bodyRef}>
+        <StageHeader stage={stage} totals={totals} />
 
-        <Link className="btn-secondary" to={`/explore`}>
-          {t.stage.data.explore}
-        </Link>
-      </div>
-
-      <div className="stage-cover-image mt-8">
-        {coverSrc ? (
-          <img
-            src={coverSrc}
-            alt={cover?.alternativeText ?? ""}
-            width={cover?.width ?? undefined}
-            height={cover?.height ?? undefined}
-            fetchPriority="high"
-            className=""
-          />
-        ) : (
-          <div className="image-placeholder-stage" aria-hidden="true"></div>
-        )}
-      </div>
-
-      <section className="stage-body scroll-smooth">
-        <div className="prose">
-          {stage.body && (
-            <Markdown remarkPlugins={[remarkGfm]}>{stage.body}</Markdown>
-          )}
-        </div>
-
-        <div className="hidden lg:flex flex-col gap-12 lg:sticky lg:top-24 lg:self-start">
-          {stage.routePreview && stage.stageNumber != null && (
-            <ElevationProfile
+        <div className="flex flex-col gap-4 md:hidden">
+          {stage.routePreview && (
+            <ElevationGraph
               profile={stage.routePreview.profile}
               distanceKm={stage.routePreview.distanceKm}
-              stageNumber={stage.stageNumber}
+              displayLabels={false}
             />
           )}
-          <TableOfContents headings={headings} />
+
+          <Link className="btn-secondary" to={`/explore`}>
+            {t.stage.data.explore}
+          </Link>
         </div>
+
+        <div className="stage-cover-image mt-8">
+          {coverSrc ? (
+            <img
+              src={coverSrc}
+              alt={cover?.alternativeText ?? ""}
+              width={cover?.width ?? undefined}
+              height={cover?.height ?? undefined}
+              fetchPriority="high"
+              className=""
+            />
+          ) : (
+            <div className="image-placeholder-stage" aria-hidden="true"></div>
+          )}
+        </div>
+
+        <section className="stage-body scroll-smooth">
+          <div className="prose">
+            {stage.body && (
+              <Markdown remarkPlugins={[remarkGfm]}>{stage.body}</Markdown>
+            )}
+          </div>
+
+          <div className="hidden lg:flex flex-col gap-12 lg:sticky lg:top-24 lg:self-start">
+            {stage.routePreview && stage.stageNumber != null && (
+              <ElevationProfile
+                profile={stage.routePreview.profile}
+                distanceKm={stage.routePreview.distanceKm}
+                stageNumber={stage.stageNumber}
+              />
+            )}
+            <TableOfContents headings={headings} />
+          </div>
+        </section>
+
+        <StageGallery stage={stage} />
+
+        <StageNav prev={prev} next={next} />
       </section>
-
-      <StageGallery stage={stage} />
-
-      <StageNav prev={prev} next={next} />
     </article>
   );
 }

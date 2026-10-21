@@ -3,6 +3,7 @@ import type { StageSummary } from "~/data/stages.server";
 import { formatDate, formatNumber, formatStageDay } from "~/lib/format";
 import { localePath, useLocale, type Locale } from "~/lib/i18n";
 import { placeName, routeLabel } from "~/lib/places";
+import { strapiMedia } from "~/lib/strapi-media";
 
 type StageRowProps = {
   stage: StageSummary;
@@ -44,17 +45,21 @@ export default function StageRow({ stage }: StageRowProps) {
       className="stage-row"
       to={localePath(`/journal/${stage.slug}`, locale)}
     >
-      {coverImage?.url ? (
-        <img
-          src={coverImage?.url}
-          alt={coverImage?.alternativeText ?? ""}
-          width={coverImage?.width ?? undefined}
-          height={coverImage?.height ?? undefined}
-          loading="lazy"
-        />
-      ) : (
-        <div className="image-placeholder" aria-hidden="true" />
-      )}
+      <div className="flex justify-center items-center">
+        {coverImage?.url ? (
+          <img
+            src={strapiMedia(coverImage?.url)}
+            alt={coverImage?.alternativeText ?? ""}
+            width={coverImage?.width ?? undefined}
+            height={coverImage?.height ?? undefined}
+            loading="lazy"
+            className="object-cover h-full w-full"
+          />
+        ) : (
+          <div className="image-placeholder h-full" aria-hidden="true" />
+        )}
+      </div>
+
 
       <div className="stage-info flex flex-col items-start gap-2">
         <p className="text-label-sm">

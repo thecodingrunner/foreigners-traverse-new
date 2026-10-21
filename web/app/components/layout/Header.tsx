@@ -11,6 +11,7 @@ import {
   useLanguageHref,
 } from "~/hooks/navigation";
 import { LANGUAGES, NAV } from "~/lib/navigation";
+import { PROGRESS_SLOT_ID } from "~/components/stage/ReadingProgress";
 
 type HeaderProps = {
   totals: RideTotals | null;
@@ -99,6 +100,12 @@ export default function Header({ totals }: HeaderProps) {
             ></div>
           </button>
         </div>
+
+        <div
+          id={PROGRESS_SLOT_ID}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-full h-[3px]"
+        />
       </header>
 
       <OffCanvas
